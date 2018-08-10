@@ -44,13 +44,12 @@ namespace Blockchain
 
         public string calculateHash(int nextIndex, string previousBlockHash, long nextTimestamp, string blockData, int nonce)
         {
-            string hash = ComputeSha256Hash(nextIndex + previousBlockHash + nextTimestamp + blockData);
-            return hash;
+            return ComputeSha256Hash(nextIndex + previousBlockHash + nextTimestamp + blockData);
         }
 
         public string calculateHashForBlock(Block block)
         {
-            throw new NotImplementedException();
+            return calculateHash(block.index, block.previousHash, block.timeStamp, block.data, block.nonce);
         }
 
         public void addBlock(Block newBlock)
