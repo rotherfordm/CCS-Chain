@@ -9,10 +9,10 @@ namespace Blockchain
         public DateTime timeStamp { set; get; }
         public string data { set; get; }
         public string hash { set; get; }
-        public string difficulty { set; get; }
-        public string nonce { set; get; }
+        public int difficulty { set; get; }
+        public int nonce { set; get; }
 
-        public Block(int index, string previousHash, DateTime timeStamp, string data, string hash, string difficulty, string nonce)
+        public Block(int index, string previousHash, DateTime timeStamp, string data, string hash, int difficulty, int nonce)
         {
             this.index = index;
             this.previousHash = previousHash;
@@ -23,6 +23,13 @@ namespace Blockchain
             this.nonce = nonce;     
         }
 
-
+        public Block(int index, string previousHash, DateTime timeStamp, string data, string hash)
+        {
+            this.index = index;
+            this.previousHash = previousHash;
+            this.timeStamp = timeStamp;
+            this.data = data;
+            this.hash = hash;
+        }
     }
 }
