@@ -22,34 +22,35 @@ namespace Blockchain
             return blockChain[blockChain.Count - 1];
         }
 
-        public string calculateHash(int nextIndex, string previousBlockHash, long nextTimestamp, string blockData)
+        //HASHING - SHAN
+        static string ComputeSha256Hash(string rawData)
         {
-            //TODO: Implement SHA256 hashing use C# hash
-            string hash = "";
-            throw new NotImplementedException();
+            // Create a SHA256   
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                // ComputeHash - returns byte array  
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+
+                // Convert byte array to a string   
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x1"));
+                }
+                return builder.ToString();
+            }
         }
+
 
         public string calculateHash(int nextIndex, string previousBlockHash, long nextTimestamp, string blockData, int nonce)
         {
-            //TODO: Implement SHA256 hashing use C# hash
-            string hash = "";
-            throw new NotImplementedException();
+            string hash = ComputeSha256Hash(nextIndex + previousBlockHash + nextTimestamp + blockData);
+            return hash;
         }
 
         public string calculateHashForBlock(Block block)
         {
             throw new NotImplementedException();
-        }
-
-        public Block generateNextBlock(string blockData)
-        {
-            Block previousBlock = getLatestBlock();
-            int nextIndex = previousBlock.index + 1;
-            //TODO: some universal unix time converstion
-            long nextTimestamp = new long();
-            nextTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            string nextHash = calculateHash(nextIndex, previousBlock.hash, nextTimestamp, blockData);
-            return new Block(nextIndex, previousBlock.hash, nextTimestamp, blockData, nextHash);
         }
 
         public void addBlock(Block newBlock)
