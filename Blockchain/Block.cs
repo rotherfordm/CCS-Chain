@@ -20,7 +20,7 @@ namespace Blockchain
             this.data = data;
             this.hash = hash;
             this.difficulty = difficulty;
-            this.nonce = nonce;            
+            this.nonce = nonce;     
         }
 
 
