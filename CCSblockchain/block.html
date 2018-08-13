@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Genesis Block</title>
+</head>
+<body>
+
+    <div>
+        <h2>Blocks</h2>
+        <ul id="block" />
+    </div>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+    <script>
+        var uri = 'blocks';
+
+        $(document).ready(function () {
+            // Send an AJAX request
+            $.getJSON(uri)
+                .done(function (data) {
+                    $.each(data, function (key, item) {
+                        $('<li>', { text: formatItem(item) }).appendTo($('#block'));
+                    });
+                });
+        });
+
+        function formatItem(item) {
+            return "[{" + "\"index\":" + item.index + ",\"previoushash\":" + item.previousHash + ",\"timestamp\":" + item.timeStamp + ", \"data\":" + item.data + ", \"hash\":" + item.hash + "}]";
+        }
+
+    </script>
+</body>
+</html>

@@ -31,5 +31,10 @@ namespace Blockchain
             this.data = data;
             this.hash = hash;
         }
+
+        public Block()
+        {
+
+        }
     }
 }
