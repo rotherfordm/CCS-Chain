@@ -91,6 +91,8 @@
     </Compile>
     <Compile Include="Models\Block.cs" />
     <Compile Include="Models\BlockHandler.cs" />
+    <Compile Include="Models\MerkleTree.cs" />
+    <Compile Include="Models\Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
