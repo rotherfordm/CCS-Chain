@@ -10,8 +10,9 @@ namespace Blockchain
     {
         public List<Block> blockChain { set; get; }
         public int difficulty { set; get; }
+       
 
-        BlockHandler()
+        public BlockHandler()
         {
             blockChain.Add(getGenesisBlock());
             difficulty = 4;
@@ -20,6 +21,12 @@ namespace Blockchain
         public Block getLatestBlock()
         {
             return blockChain[blockChain.Count - 1];
+        }
+
+        // Get the list of blocks
+        public List<Block> GetBlocks()
+        {
+            return blockChain;
         }
 
         //HASHING - SHAN
