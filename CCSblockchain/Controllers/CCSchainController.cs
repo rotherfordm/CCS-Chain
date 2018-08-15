@@ -2,24 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+//using System.Web.Mvc;
 
 using Blockchain;
-//using System.Web.Http;
+using System.Web.Http;
 
 
 namespace CCSblockchain.Controllers
 {
-    public class CCSchainController : Controller
+    public class CCSchainController : ApiController
     {
-        List<Block> listBlocks = new List<Block>();
         BlockHandler obj = new BlockHandler();
 
-        [Route("blocks")]
+        [Route("api/blocks")]
         [HttpGet]
-        public IEnumerable<Block> GetAllBlocks()
-        {                                            
-            return obj.GetBlocks();
+        public IHttpActionResult GetAllBlocks()
+        {
+            return Ok(obj.blockChain);
         }
 
         //[Route("mine")]
