@@ -4,37 +4,23 @@ namespace Blockchain
 {
     public class Block
     {
-        public int index { set; get; }
-        public string previousHash { set; get; }
-        public long timeStamp { set; get; }
-        public string data { set; get; }
-        public string hash { set; get; }
-        public int difficulty { set; get; }
-        public int nonce { set; get; }
+        public int Index { get; set; }
+        public string PreviousHash { get; set; }
+        public long TimeStamp { get; set; }
+        public string Data { get; set; }
+        public string Hash { get; set; }
+        public int Difficulty { get; set; }
+        public int Nonce { get; set; }
 
-        public Block(int index, string previousHash, long timeStamp, string data, string hash, int difficulty, int nonce)
+        public Block(int index, string prevHash, long timeStamp, string data, string hash, int difficulty, int nonce)
         {
-            this.index = index;
-            this.previousHash = previousHash;
-            this.timeStamp = timeStamp;
-            this.data = data;
-            this.hash = hash;
-            this.difficulty = difficulty;
-            this.nonce = nonce;     
-        }
-
-        public Block(int index, string previousHash, long timeStamp, string data, string hash)
-        {
-            this.index = index;
-            this.previousHash = previousHash;
-            this.timeStamp = timeStamp;
-            this.data = data;
-            this.hash = hash;
-        }
-
-        public Block()
-        {
-
+            this.Index = index;
+            this.PreviousHash = prevHash;
+            this.TimeStamp = timeStamp;
+            this.Data = data;
+            this.Hash = hash;
+            this.Difficulty = difficulty;
+            this.Nonce = nonce;
         }
     }
 }
