@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace Blockchain
+namespace CCSblockchain.Models
 {
     public class BlockHandler
     {

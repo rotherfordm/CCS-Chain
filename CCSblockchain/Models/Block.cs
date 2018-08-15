@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Blockchain
+namespace CCSblockchain.Models
 {
     public class Block
     {

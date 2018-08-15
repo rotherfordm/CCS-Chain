@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 
-namespace MerkleTree
+namespace CCSblockchain.Models
 {
     class MerkleTree
     {
@@ -24,6 +24,13 @@ namespace MerkleTree
 
         }
 
+        /// <summary>
+        /// This method builds a Merkle Root from the passed in iterable.
+        /// After the data is preprocessed, it calls the internal __build_root
+        /// function to build the actual Merkle Root.
+        /// </summary>
+        /// <param name="nodes">iterable (list_iterator): The collection you want to create the root from</param>
+        /// <returns>root - The newly built root of the Merkle Tree </returns>
         public Node BuildRoot(List<Node> nodes)
         {
             Node root = new Node();
@@ -54,11 +61,11 @@ namespace MerkleTree
             return false;
         }
 
-        public List<Nodes> RequestProof(byte value)
-        {
+        //public List<Nodes> RequestProof(byte value)
+        //{
 
-            return 
-        }
+        //    return 
+        //}
 
     }
 }
