@@ -4,7 +4,7 @@ using System.Text;
 using System.Security.Cryptography;
 using System.Linq;
 
-namespace Blockchain
+namespace CCSblockchain.Models
 {
     public class BlockHandler
     {

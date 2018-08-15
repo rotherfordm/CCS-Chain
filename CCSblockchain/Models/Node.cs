@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MerkleTree
+namespace CCSblockchain.Models
 {
     class Node
     {
@@ -16,7 +16,10 @@ namespace MerkleTree
 
         public Node()
         {
-
+            value = 0;
+            left = null;
+            right = null;
+            root = null;
         }
 
         /*
