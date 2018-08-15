@@ -16,10 +16,9 @@ namespace Blockchain
         {
             AddBlock(GetGenesisBlock());
             AddBlock(MineBlock("Sample Data"));
-            //Display the blocks in reverse to see the latest blocks
-            //var reversedBlocks = blocks.OrderBy(x => x.Index).Reverse();
-            //string strJson = JsonConvert.SerializeObject(reversedBlocks, Formatting.Indented);
-            //Console.WriteLine(strJson);
+
+            string strJson = JsonConvert.SerializeObject(PreviousBlock(), Formatting.Indented);
+            Console.WriteLine(strJson);
         }
 
         public Block GetGenesisBlock()
