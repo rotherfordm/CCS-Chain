@@ -32,9 +32,11 @@ namespace _2way_connections_of_node
             Thread tA = new Thread(new ThreadStart(WaitClientConnection));
             Thread tB = new Thread(new ThreadStart(AcceptDataFromClient));
             Thread tC = new Thread(new ThreadStart(SendDataToServers));
+            Thread tD = new Thread(new ThreadStart(CheckClients));
             tA.Start();
             tB.Start();
             tC.Start();
+            tD.Start();
 
         }
 
@@ -101,39 +103,46 @@ namespace _2way_connections_of_node
         {
             while (true)
             {
-                for (int i = 0; i < listClients.Count; i++)
+                if (listClients.Count != 0)
                 {
-                    TcpClient client = listClients[i];
-
-                    NetworkStream stream = client.GetStream();
-
-                    if (stream.DataAvailable)
+                    for (int i = 0; i < listClients.Count; i++)
                     {
-                        byte[] dataByte = new byte[client.Available];
+                        try
+                        {
+                            TcpClient client = listClients[i];
 
-                        stream.Read(dataByte, 0, dataByte.Length);
+                            NetworkStream stream = client.GetStream();
+
+                            if (stream.DataAvailable)
+                            {
+                                byte[] dataByte = new byte[client.Available];
+
+                                stream.Read(dataByte, 0, dataByte.Length);
 
 
-                        //========================
-                        string replystring = "Have a reply!";
-                        byte[] reply = new byte[replystring.Length];
+                                //========================
+                                string replystring = "Transaction Completed";
+                                byte[] reply = new byte[replystring.Length];
 
-                        reply = Encoding.ASCII.GetBytes(replystring);
-                        stream.Write(reply, 0, reply.Length);
-                        //========================
+                                reply = Encoding.ASCII.GetBytes(replystring);
+                                stream.Write(reply, 0, reply.Length);
+                                //========================
 
-                        string dataString = Encoding.ASCII.GetString(dataByte);
+                                string dataString = Encoding.ASCII.GetString(dataByte);
 
-                        WriteLine(dataString);
+                                WriteLine(dataString);
 
-                        //WriteLine(StripHeaderFromData(dataString));
-                        //SampleSend(/*ProcessReceivedData(*/dataString/*)*/);
+                                //WriteLine(StripHeaderFromData(dataString));
+                                //SampleSend(/*ProcessReceivedData(*/dataString/*)*/);
 
-                        //ProcessTransaction(StripHeaderFromData(dataString));
+                                //ProcessTransaction(StripHeaderFromData(dataString));
+
+                            }
+                        }
+                        catch { }
+
 
                     }
-
-                    
                 }
             }
         }
@@ -193,21 +202,24 @@ namespace _2way_connections_of_node
         {
             while (true)
             {
-                for (int i = 0; i < listClients.Count; i++)
+                if (listClients.Count != 0)
                 {
-                    TcpClient client = listClients[i];
-
-                    if (client.Client.Poll(0, SelectMode.SelectRead))
+                    for (int i = 0; i < listClients.Count; i++)
                     {
-                        try
+                        TcpClient client = listClients[i];
+
+                        if (client.Client.Poll(0, SelectMode.SelectRead))
                         {
-                            byte[] buff = new byte[1];
-                            client.Client.Receive(buff, SocketFlags.Peek);
-                        }
-                        catch
-                        {
-                            Console.WriteLine("{0} disconnected!", client.Client.RemoteEndPoint);
-                            listClients.Remove(client);
+                            try
+                            {
+                                byte[] buff = new byte[1];
+                                client.Client.Receive(buff, SocketFlags.Peek);
+                            }
+                            catch
+                            {
+                                Console.WriteLine("{0} disconnected!", client.Client.RemoteEndPoint);
+                                listClients.Remove(client);
+                            }
                         }
                     }
                 }
