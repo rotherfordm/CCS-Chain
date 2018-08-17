@@ -16,14 +16,33 @@ namespace Instance_3
         {
             try
             {
-                TcpClient client = new TcpClient("127.0.0.1", 3000);
-                WriteLine($"Successfully connected to IP = 127.0.0.1 PORT = 3000");
+                TcpClient client = new TcpClient("192.168.254.119", 3000);
+                WriteLine($"Successfully connected to IP = 192.168.254.119 PORT = 3000");
+
+
+
+                NetworkStream stream = client.GetStream();
+
+                string data = "TRIAL";
+
+                byte[] dataByte = Encoding.ASCII.GetBytes(data);
+
+                stream.Write(dataByte, 0, dataByte.Length);
+
+
+                byte[] byteReceived = new byte[100];
+                stream.Read(byteReceived, 0, byteReceived.Length);
+                string recvdString = Encoding.ASCII.GetString(byteReceived);
+
+                WriteLine(recvdString);
+
             }
             catch (Exception e)
             {
                 WriteLine(e);
             }
 
+           
             ReadKey();
         }
     }

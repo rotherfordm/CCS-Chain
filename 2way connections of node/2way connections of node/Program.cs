@@ -15,7 +15,7 @@ namespace _2way_connections_of_node
     class Program
     {
         // Server
-        static TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 3000);
+        static TcpListener server = new TcpListener(IPAddress.Parse("192.168.254.119"), 3000);
 
         // List of Clients
         static List<TcpClient> listClients = new List<TcpClient>();
@@ -122,13 +122,14 @@ namespace _2way_connections_of_node
                         stream.Write(reply, 0, reply.Length);
                         //========================
 
-
                         string dataString = Encoding.ASCII.GetString(dataByte);
 
-                        WriteLine(StripHeaderFromData(dataString));
-                        SampleSend(/*ProcessReceivedData(*/dataString/*)*/);
+                        WriteLine(dataString);
 
-                        ProcessTransaction(StripHeaderFromData(dataString));
+                        //WriteLine(StripHeaderFromData(dataString));
+                        //SampleSend(/*ProcessReceivedData(*/dataString/*)*/);
+
+                        //ProcessTransaction(StripHeaderFromData(dataString));
 
                     }
 
@@ -183,6 +184,31 @@ namespace _2way_connections_of_node
                         // Start a network stream
                         NetworkStream stream = client.GetStream();
                         stream.Write(sendData, 0, sendData.Length);
+                    }
+                }
+            }
+        }
+
+        public static void CheckClients()
+        {
+            while (true)
+            {
+                for (int i = 0; i < listClients.Count; i++)
+                {
+                    TcpClient client = listClients[i];
+
+                    if (client.Client.Poll(0, SelectMode.SelectRead))
+                    {
+                        try
+                        {
+                            byte[] buff = new byte[1];
+                            client.Client.Receive(buff, SocketFlags.Peek);
+                        }
+                        catch
+                        {
+                            Console.WriteLine("{0} disconnected!", client.Client.RemoteEndPoint);
+                            listClients.Remove(client);
+                        }
                     }
                 }
             }
