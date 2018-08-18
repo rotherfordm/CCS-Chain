@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="MerkleTreeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="HashHandlerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

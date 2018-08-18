@@ -5,7 +5,7 @@ namespace CCSblockchain.Models
 {
     public static class HashHandler
     {
-        static string ComputeSha256Hash(string rawData)
+        public static string ComputeSha256Hash(string rawData)
         {
             using (SHA256 sha256Hash = SHA256.Create())
             {
