@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CCSblockchain.Models
+﻿namespace CCSblockchain.Models
 {
-    class Node
+    public class Node
     {
-        public byte value { set; get; }
-        public Node left { set; get; }
-        public Node right { set; get; }
-        public Node root { set; get; }
-
+        public byte[] Value { set; get; }
+        public Node Left { set; get; }
+        public Node Right { set; get; }
+        public Node Root { set; get; }
 
         public Node()
         {
-            value = 0;
-            left = null;
-            right = null;
-            root = null;
+            Value = null;
+            Left = null;
+            Right = null;
+            Root = null;
         }
 
         /*
@@ -28,14 +21,13 @@ namespace CCSblockchain.Models
         Args:
             item (bytes): Bytes object that represents the hashed value that resides in the current node
             left (Node): Reference to the left subtree or a None value if current node is leaf
-            right (Node): Reference to the right subtree or a None value if current node is leaf
+            right (NoSSDDde): Reference to the right subtree or a None value if current node is leaf
          */
-        public Node(byte item, Node left, Node right)
+        public Node(byte[] item, Node left = null, Node right = null)
         {
-            this.value = item;
-            this.left = left;
-            this.right = right;
-
+            this.Value = item;
+            this.Left = left;
+            this.Right = right;
         }
     }
 }
