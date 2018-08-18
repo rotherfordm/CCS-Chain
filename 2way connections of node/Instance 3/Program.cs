@@ -23,7 +23,7 @@ namespace Instance_3
 
                 NetworkStream stream = client.GetStream();
 
-                string data = "TRIAL";
+                string data = "Sup boi";
 
                 byte[] dataByte = Encoding.ASCII.GetBytes(data);
 
