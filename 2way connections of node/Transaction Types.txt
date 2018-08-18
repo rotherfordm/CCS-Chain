@@ -1,0 +1,1 @@
+%NodeData% = sending client node data for the server to reciprocate connection
