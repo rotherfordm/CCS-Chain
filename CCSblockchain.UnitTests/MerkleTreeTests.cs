@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CCSblockchain.Models;
+using System.Text;
 
 namespace CCSblockchain.UnitTests
 {
@@ -18,6 +19,32 @@ namespace CCSblockchain.UnitTests
 
             //assert
         }
+
+
+
+        [TestMethod]
+        public void Node_Check_NotEmpty()
+        {
+            byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+
+            Node MerkleRoot = new Node();
+
+            Node L1 = new Node();
+            Node L2 = new Node();
+            Node L1_L2 = new Node();
+
+            Node L3 = new Node();
+            Node L4 = new Node();
+            Node L3_L4 = new Node();
+
+            
+
+
+            //act
+
+            //assert
+        }
+
 
         [TestMethod]
         public void Test_Merkle_No_Digest()
