@@ -91,7 +91,7 @@ namespace CCSblockchain.Models
             List<Node> NewNodeLayer = new List<Node>();
 
             int j = 0;
-            for (int i = 0; i < LayersToMake; i++)
+            for (int i = 0; i < CountOfNodesToMake; i++)
             {
                 Node node = new Node();
                 node.Left = NodesToBeAddLayer[j];
