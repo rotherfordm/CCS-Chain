@@ -13,9 +13,10 @@ namespace CCSblockchain.Models
     public class MerkleTree
     {
         public Node Root { set; get; }
-        public List<Node> Tree { set; get; }
         public List<Node> Leaves { set; get; }
+        public List<List<Node>> Layers { set; get; }
         public double CountOfNodesToMake { set; get; }
+
         public int LayersToMake { set; get; }
 
         public MerkleTree(List<Node> Leaves)
@@ -23,16 +24,6 @@ namespace CCSblockchain.Models
             this.Leaves = Leaves;
             CountOfNodesToMake = Leaves.Count;
             LayersToMake = 0;
-        }
-
-        /// <summary>
-        /// Calls the static function of the HashHandler to Hash the Values of Left & Right side Of A Node
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        public string MakeNodeHash(Node node)
-        {
-            return HashHandler.ComputeSha256Hash(node.Left.Value.ToString() + node.Right.Value.ToString());
         }
 
         /// <summary>
@@ -69,34 +60,50 @@ namespace CCSblockchain.Models
         {
             SetLayersToMake();
 
+            List<Node> NodesToBeAddLayer = Leaves;
+
             for (int i = 0; i < LayersToMake; i++)
             {
                 SetCountOfNodesToMake();
-                CheckIfNodeCountIsOdd();
-                BuildNodeLayer();
+                Layers.Add(BuildNodeLayer(CheckIfNodeCountIsOdd(NodesToBeAddLayer)));
+                NodesToBeAddLayer = Layers[-1];
             }
         }
 
         /// <summary>
         /// Checks if the Node is odd and adds a copy of the Left Node of The Last Node to the List
         /// </summary>
-        public void CheckIfNodeCountIsOdd()
+        public List<Node> CheckIfNodeCountIsOdd(List<Node> nodesToBeLayered)
         {
             if (CountOfNodesToMake % 2 != 0)
             {
-                this.Leaves.Add(Leaves[-2]);
+                nodesToBeLayered.Add(Leaves[-2]);
             }
+
+            return nodesToBeLayered;
         }
 
         /// <summary>
         /// Builds a new Layer based on how many nodes to make
         /// </summary>
-        public void BuildNodeLayer()
+        public List<Node> BuildNodeLayer(List<Node> NodesToBeAddLayer)
         {
-            for (int i = 0; i < CountOfNodesToMake; i++)
+            List<Node> NewNodeLayer = new List<Node>();
+
+            int j = 0;
+            for (int i = 0; i < LayersToMake; i++)
             {
-                this.Leaves.Add(new Node(MakeNodeHash(Leaves[i]), Leaves[i].Left, Leaves[i].Right));
+                Node node = new Node();
+                node.Left = NodesToBeAddLayer[j];
+                j++;
+                node.Right = NodesToBeAddLayer[j];
+                node.Value = HashHandler.ComputeSha256Hash(node.Left.Value + node.Right.Value);
+
+                NewNodeLayer.Add(node);
+                j++;
             }
+
+            return NewNodeLayer;
         }
     }
 }
