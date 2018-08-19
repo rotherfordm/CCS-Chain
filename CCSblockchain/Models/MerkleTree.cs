@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace CCSblockchain.Models
 {
@@ -13,6 +14,14 @@ namespace CCSblockchain.Models
     {
         public Node Root { set; get; }
         public List<Node> Tree { set; get; }
+        public List<Node> Leaves { set; get; }
+        public double CountOfNodesToMake { set; get; }
+
+        public MerkleTree(List<Node> Leaves)
+        {
+            this.Leaves = Leaves;
+            this.CountOfNodesToMake = Leaves.Count;
+        }
 
         public string GetRootHash(string left, string right)
         {
@@ -31,7 +40,7 @@ namespace CCSblockchain.Models
 
         public void BuildTree()
         {
-
+            this.CountOfNodesToMake = Math.Round( CountOfNodesToMake / 2, 0, MidpointRounding.AwayFromZero);
         }
     }
 }

@@ -21,7 +21,7 @@
         Args:
             item (string): string object that represents the hashed value that resides in the current node
             left (Node): Reference to the left subtree or a None value if current node is leaf
-            right (NoSSDDde): Reference to the right subtree or a None value if current node is leaf
+            right (Node): Reference to the right subtree or a None value if current node is leaf
          */
         public Node(string item, Node left = null, Node right = null)
         {

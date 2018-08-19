@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CCSblockchain.Models;
 using System.Text;
+using System.Collections.Generic;
 
 namespace CCSblockchain.UnitTests
 {
@@ -76,6 +77,39 @@ namespace CCSblockchain.UnitTests
             Assert.AreSame(L3_L4, MerkleRoot.Right);
         }
 
+        [TestMethod]
+        public void MerkleTree_BuildValidNodes_True()
+        {
+
+        }
+
+        [TestMethod]
+        public void MerkleTree_CountOfNodesToMake_AreEqual()
+        {
+            //Given 20 Leaves Count how many Nodes to make per layer
+            List<Node> Leaves = new List<Node>();
+
+            for (int x = 0; x < 20; x++)
+            {
+                Leaves.Add(new Node(x.ToString()));
+            }
+
+            MerkleTree merkleTree = new MerkleTree(Leaves);
+            merkleTree.BuildTree();
+            Assert.AreEqual(10, merkleTree.CountOfNodesToMake);
+
+            merkleTree.BuildTree();
+            Assert.AreEqual(5, merkleTree.CountOfNodesToMake);
+
+            merkleTree.BuildTree();
+            Assert.AreEqual(3, merkleTree.CountOfNodesToMake);
+
+            merkleTree.BuildTree();
+            Assert.AreEqual(2, merkleTree.CountOfNodesToMake);
+
+            merkleTree.BuildTree();
+            Assert.AreEqual(1, merkleTree.CountOfNodesToMake);
+        }
 
         [TestMethod]
         public void Test_Merkle_No_Digest()
