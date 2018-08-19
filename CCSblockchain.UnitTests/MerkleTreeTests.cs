@@ -80,11 +80,11 @@ namespace CCSblockchain.UnitTests
         public void MerkleTree_SetLayersToMake_AreEqual()
         {
             //Given 10 Leaves Count how many Nodes to make per layer
-            /// Ex. LayerCount = 10
-            /// LayerCount / 2 = 5 Layer1 Nodes to Make
-            /// 5 / 2 = 2.5 //Round off to 3 Layer2 Nodes to Make
-            /// 3 / 2 = 1.5 //Round off to 2 Layer3 Nodes to Make
-            /// 2 / 2 = 1 Layer4 Nodes to Make
+            /// Ex. LayerCount = 10// L1
+            /// LayerCount / 2 = 5 // L2
+            /// 5 / 2 = 2.5 // L3
+            /// 3 / 2 = 1.5 // L4
+            /// 2 / 2 = 1 //L5
             List<Node> Leaves = new List<Node>();
 
             for (int x = 0; x < 10; x++)
@@ -92,11 +92,37 @@ namespace CCSblockchain.UnitTests
                 Leaves.Add(new Node(x.ToString()));
             }
            
-            int ExpectedLayersToMake = 4;
+            int ExpectedLayersToMake = 5;
 
             MerkleTree merkleTree = new MerkleTree(Leaves);
+
             merkleTree.SetLayersToMake();
             Assert.AreEqual(ExpectedLayersToMake, merkleTree.LayersToMake);
+           
+        }
+
+        [TestMethod]
+        public void MerkleTree_BuildTree_AreEqual()
+        {
+            //Given 10 Leaves Count how many Nodes to make per layer
+            /// Ex. LayerCount = 10// L1
+            /// LayerCount / 2 = 5 // L2
+            /// 5 / 2 = 2.5 // L3
+            /// 3 / 2 = 1.5 // L4
+            /// 2 / 2 = 1 //L5
+            List<Node> Leaves = new List<Node>();
+
+            for (int x = 0; x < 10; x++)
+            {
+                Leaves.Add(new Node(x.ToString()));
+            }
+
+            int ExpectedLayersToMake = 5;
+
+            MerkleTree merkleTree = new MerkleTree(Leaves);
+
+            merkleTree.BuildTree();
+            Assert.AreEqual(ExpectedLayersToMake, merkleTree.Layers.Count);
         }
 
         [TestMethod]

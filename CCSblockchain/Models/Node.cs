@@ -5,14 +5,12 @@
         public string Value { set; get; }
         public Node Left { set; get; }
         public Node Right { set; get; }
-        public Node Root { set; get; }
 
         public Node()
         {
             Value = null;
             Left = null;
             Right = null;
-            Root = null;
         }
 
         /// <summary>

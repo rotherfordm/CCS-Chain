@@ -29,11 +29,12 @@ namespace CCSblockchain.Models
         /// <summary>
         /// Sets the Count of Nodes to make on a Layer
         /// Rounds off if 0.5
-        /// Ex. LayerCount = 10
-        /// LayerCount / 2 = 5 Layer1 Nodes to Make
-        /// 5 / 2 = 2.5 //Round off to 3 Layer2 Nodes to Make
-        /// 3 / 2 = 1.5 //Round off to 2 Layer3 Nodes to Make
-        /// 2 / 2 = 1 Layer4 Nodes to Make
+        //Given 10 Leaves Count how many Nodes to make per layer
+        /// Ex. LayerCount = 10// L1
+        /// LayerCount / 2 = 5 // L2
+        /// 5 / 2 = 2.5 // L3
+        /// 3 / 2 = 1.5 // L4
+        /// 2 / 2 = 1 //L5
         /// </summary>
         public void SetCountOfNodesToMake()
         {
@@ -45,11 +46,12 @@ namespace CCSblockchain.Models
         /// </summary>
         public void SetLayersToMake()
         {
-            for (double i = Leaves.Count; i != 1;)
+            for(double i = Leaves.Count; i != 1;)
             {
                 i = Math.Round(i / 2, 0, MidpointRounding.AwayFromZero);
                 LayersToMake++;
             }
+            
         }
 
 
@@ -61,12 +63,15 @@ namespace CCSblockchain.Models
             SetLayersToMake();
 
             List<Node> NodesToBeAddLayer = Leaves;
+            Layers = new List<List<Node>>();
+            Layers.Add(Leaves);
 
             for (int i = 0; i < LayersToMake; i++)
             {
                 SetCountOfNodesToMake();
                 Layers.Add(BuildNodeLayer(CheckIfNodeCountIsOdd(NodesToBeAddLayer)));
-                NodesToBeAddLayer = Layers[-1];
+                NodesToBeAddLayer = Layers[Layers.Count - 2];
+              
             }
         }
 
@@ -75,9 +80,12 @@ namespace CCSblockchain.Models
         /// </summary>
         public List<Node> CheckIfNodeCountIsOdd(List<Node> nodesToBeLayered)
         {
-            if (CountOfNodesToMake % 2 != 0)
+            if (!(nodesToBeLayered.Count == 1))
             {
-                nodesToBeLayered.Add(Leaves[-2]);
+                if (nodesToBeLayered.Count % 2 != 0)
+                {
+                    nodesToBeLayered.Add(Leaves[nodesToBeLayered.Count - 2]);
+                }
             }
 
             return nodesToBeLayered;
@@ -95,7 +103,12 @@ namespace CCSblockchain.Models
             {
                 Node node = new Node();
                 node.Left = NodesToBeAddLayer[j];
-                j++;
+
+                if (CountOfNodesToMake != 1)
+                {
+                    j++;
+                }
+                
                 node.Right = NodesToBeAddLayer[j];
                 node.Value = HashHandler.ComputeSha256Hash(node.Left.Value + node.Right.Value);
 
