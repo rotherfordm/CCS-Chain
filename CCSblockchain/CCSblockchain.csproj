@@ -144,10 +144,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Block.cs" />
+    <Compile Include="Models\BlockExplorer.cs" />
     <Compile Include="Models\BlockHandler.cs" />
+    <Compile Include="Models\Faucet.cs" />
     <Compile Include="Models\HashHandler.cs" />
     <Compile Include="Models\MerkleTree.cs" />
     <Compile Include="Models\Node.cs" />
+    <Compile Include="Models\Wallet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
