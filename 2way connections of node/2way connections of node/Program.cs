@@ -187,17 +187,6 @@ namespace _2way_connections_of_node
 
         }
 
-        //static void JsonStringToObject(string x, string obj, out object objOut)
-        //{
-        //    objOut = string.Empty;
-
-        //    if (obj == "Transaction")
-        //    {
-        //        var jsonSerialized = JsonConvert.SerializeObject(x);
-        //        objOut = JsonConvert.DeserializeObject<Transaction>(jsonSerialized);
-        //    }
-        //}
-
         static void ReciprocateConnection(string x)
         {
             string input = x.Replace("%NodeData%", "");
