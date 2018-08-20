@@ -23,7 +23,7 @@ namespace CCSblockchain.Models
         {
             this.Leaves = Leaves;
             CountOfNodesToMake = Leaves.Count;
-            LayersToMake = 0;
+            LayersToMake = 1;
         }
 
         /// <summary>
