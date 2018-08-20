@@ -24,7 +24,7 @@ namespace CCSblockchain.Models
         {
             this.Leaves = Leaves;
             CountOfNodesToMake = Leaves.Count;
-            LayersToMake = 0;
+            LayersToMake = 1;
         }
 
         /// <summary>
@@ -52,7 +52,6 @@ namespace CCSblockchain.Models
                 i = Math.Round(i / 2, 0, MidpointRounding.AwayFromZero);
                 LayersToMake++;
             }
-            
         }
 
 
@@ -67,12 +66,13 @@ namespace CCSblockchain.Models
             Layers = new List<List<Node>>();
             Layers.Add(Leaves);
 
-            for (int i = 0; i < LayersToMake; i++)
+            for (int i = 1; LayersToMake > i; LayersToMake--)
             {
                 SetCountOfNodesToMake();
                 Layers.Add(BuildNodeLayer(CheckIfNodeCountIsOdd(NodesToBeAddLayer)));
                 NodesToBeAddLayer = Layers.Last();
             }
+            LayersToMake = Layers.Count; //actaully you can remove this, this is for module testing
         }
 
         /// <summary>

@@ -91,14 +91,14 @@ namespace CCSblockchain.UnitTests
             {
                 Leaves.Add(new Node(x.ToString()));
             }
-           
+
             int ExpectedLayersToMake = 5;
 
             MerkleTree merkleTree = new MerkleTree(Leaves);
 
             merkleTree.SetLayersToMake();
             Assert.AreEqual(ExpectedLayersToMake, merkleTree.LayersToMake);
-           
+
         }
 
         [TestMethod]
