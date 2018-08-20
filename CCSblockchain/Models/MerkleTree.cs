@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CCSblockchain.Models
 {
@@ -70,8 +71,8 @@ namespace CCSblockchain.Models
             {
                 SetCountOfNodesToMake();
                 Layers.Add(BuildNodeLayer(CheckIfNodeCountIsOdd(NodesToBeAddLayer)));
-                NodesToBeAddLayer = Layers[Layers.Count - 2];
-              
+                NodesToBeAddLayer = Layers.Last();
+                int x = 0;
             }
         }
 
@@ -108,7 +109,7 @@ namespace CCSblockchain.Models
                 {
                     j++;
                 }
-                
+                 
                 node.Right = NodesToBeAddLayer[j];
                 node.Value = HashHandler.ComputeSha256Hash(node.Left.Value + node.Right.Value);
 
