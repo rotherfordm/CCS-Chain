@@ -24,7 +24,7 @@ namespace CCSblockchain.Models
         {
             this.Leaves = Leaves;
             CountOfNodesToMake = Leaves.Count;
-            LayersToMake = 1;
+            LayersToMake = 0;
         }
 
         /// <summary>
@@ -72,7 +72,6 @@ namespace CCSblockchain.Models
                 SetCountOfNodesToMake();
                 Layers.Add(BuildNodeLayer(CheckIfNodeCountIsOdd(NodesToBeAddLayer)));
                 NodesToBeAddLayer = Layers.Last();
-                int x = 0;
             }
         }
 
@@ -85,7 +84,7 @@ namespace CCSblockchain.Models
             {
                 if (nodesToBeLayered.Count % 2 != 0)
                 {
-                    nodesToBeLayered.Add(Leaves[nodesToBeLayered.Count - 2]);
+                    nodesToBeLayered.Add(Leaves.Last());
                 }
             }
 
