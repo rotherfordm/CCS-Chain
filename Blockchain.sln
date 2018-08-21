@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Instance 3", "2way connecti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCSblockchain.UnitTests", "CCSblockchain.UnitTests\CCSblockchain.UnitTests.csproj", "{C0157956-E40C-43CE-9DD3-C02746BCBA3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wallet_DesuCoin", "Wallet_DesuCoin\Wallet_DesuCoin\Wallet_DesuCoin.csproj", "{5FB37740-830A-4FAF-82E8-AA9EF3135C51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +125,22 @@ Global
 		{C0157956-E40C-43CE-9DD3-C02746BCBA3C}.Release|x64.Build.0 = Release|Any CPU
 		{C0157956-E40C-43CE-9DD3-C02746BCBA3C}.Release|x86.ActiveCfg = Release|Any CPU
 		{C0157956-E40C-43CE-9DD3-C02746BCBA3C}.Release|x86.Build.0 = Release|Any CPU
+		{5FB37740-830A-4FAF-82E8-AA9EF3135C51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FB37740-830A-4FAF-82E8-AA9EF3135C51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FB37740-830A-4FAF-82E8-AA9EF3135C51}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{5FB37740-830A-4FAF-82E8-AA9EF3135C51}.Debug|ARM.Build.0 = Debug|Any CPU
+		{5FB37740-830A-4FAF-82E8-AA9EF3135C51}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5FB37740-830A-4FAF-82E8-AA9EF3135C51}.Debug|x64.Build.0 = Debug|Any CPU
+		{5FB37740-830A-4FAF-82E8-AA9EF3135C51}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5FB37740-830A-4FAF-82E8-AA9EF3135C51}.Debug|x86.Build.0 = Debug|Any CPU
+		{5FB37740-830A-4FAF-82E8-AA9EF3135C51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FB37740-830A-4FAF-82E8-AA9EF3135C51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FB37740-830A-4FAF-82E8-AA9EF3135C51}.Release|ARM.ActiveCfg = Release|Any CPU
+		{5FB37740-830A-4FAF-82E8-AA9EF3135C51}.Release|ARM.Build.0 = Release|Any CPU
+		{5FB37740-830A-4FAF-82E8-AA9EF3135C51}.Release|x64.ActiveCfg = Release|Any CPU
+		{5FB37740-830A-4FAF-82E8-AA9EF3135C51}.Release|x64.Build.0 = Release|Any CPU
+		{5FB37740-830A-4FAF-82E8-AA9EF3135C51}.Release|x86.ActiveCfg = Release|Any CPU
+		{5FB37740-830A-4FAF-82E8-AA9EF3135C51}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
