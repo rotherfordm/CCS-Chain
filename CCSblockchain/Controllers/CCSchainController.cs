@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 //using System.Web.Mvc;
 
-using Blockchain;
+using CCSblockchain.Models;
 using System.Web.Http;
 
 
@@ -18,7 +18,8 @@ namespace CCSblockchain.Controllers
         [HttpGet]
         public IHttpActionResult GetAllBlocks()
         {
-            return Ok(obj.blockChain);
+            //return Ok(obj.blockChain); //TODO: fix this --
+            return null; 
         }
 
         //[Route("mine")]

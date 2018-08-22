@@ -1,71 +1,122 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
+using System.Linq;
 
 namespace CCSblockchain.Models
 {
-    class MerkleTree
+    /// <summary>
+    /// The Merkle Tree is a special kind of Binary Tree that allows the user to prevent 
+    /// information malleability and preserve integrity by using cryptographically secure
+    /// hash functions.By providing leaves you create a root by concatination and hashingself.
+    /// If the root is mutated it means that the data inside the leaves was changed.You can also
+    /// derive cryptographic proofs that a piece of data is inside the tree
+    /// </summary>
+    public class MerkleTree
     {
-        /* 
-         * 
-         * `The Merkle Tree is a special kind of Binary Tree that allows the user to prevent 
-        information malleability and preserve integrity by using cryptographically secure
-        hash functions. By providing leaves you create a root by concatination and hashingself.
-        If the root is mutated it means that the data inside the leaves was changed. You can also
-        derive cryptographic proofs that a piece of data is inside the tree`
+        public Node Root { set; get; }
+        public List<Node> Leaves { set; get; }
+        public List<List<Node>> Layers { set; get; }
+        public double CountOfNodesToMake { set; get; }
 
-        Comments:
-           Complexities - This part can be improved by doing couple of modifications 
-         
-             */
+        public int LayersToMake { set; get; }
 
-        public MerkleTree()
+        public MerkleTree(List<Node> Leaves)
         {
-
+            this.Leaves = Leaves;
+            CountOfNodesToMake = Leaves.Count;
+            LayersToMake = 1;
         }
 
         /// <summary>
-        /// This method builds a Merkle Root from the passed in iterable.
-        /// After the data is preprocessed, it calls the internal __build_root
-        /// function to build the actual Merkle Root.
+        /// Sets the Count of Nodes to make on a Layer
+        /// Rounds off if 0.5
+        //Given 10 Leaves Count how many Nodes to make per layer
+        /// Ex. LayerCount = 10// L1
+        /// LayerCount / 2 = 5 // L2
+        /// 5 / 2 = 2.5 // L3
+        /// 3 / 2 = 1.5 // L4
+        /// 2 / 2 = 1 //L5
         /// </summary>
-        /// <param name="nodes">iterable (list_iterator): The collection you want to create the root from</param>
-        /// <returns>root - The newly built root of the Merkle Tree </returns>
-        public Node BuildRoot(List<Node> nodes)
+        public void SetCountOfNodesToMake()
         {
-            Node root = new Node();
-            if (!(nodes == null))
-            {
-                return null;
-            }
-            return root;
+            CountOfNodesToMake = Math.Round(CountOfNodesToMake / 2, 0, MidpointRounding.AwayFromZero);
         }
 
-        public bool Contains(object value)
+        /// <summary>
+        /// Counts how many layers to make in the tree by dividing till you get one Root Node
+        /// </summary>
+        public void SetLayersToMake()
         {
-            if (value == null) { return false; }
-
-            return false;
+            for(double i = Leaves.Count; i != 1;)
+            {
+                i = Math.Round(i / 2, 0, MidpointRounding.AwayFromZero);
+                LayersToMake++;
+            }
         }
 
-        public bool Find(Node node, byte value)
+
+        /// <summary>
+        /// Builds a Tree and its nodes based on the number of LayersToMake
+        /// </summary>
+        public void BuildTree()
         {
-            if (node.value == null)
+            SetLayersToMake();
+
+            List<Node> NodesToBeAddLayer = Leaves;
+            Layers = new List<List<Node>>();
+            Layers.Add(Leaves);
+
+            for (int i = 1; LayersToMake > i; LayersToMake--)
             {
-                return false;
+                SetCountOfNodesToMake();
+                Layers.Add(BuildNodeLayer(CheckIfNodeCountIsOdd(NodesToBeAddLayer)));
+                NodesToBeAddLayer = Layers.Last();
             }
-            if (node.value == value)
-            {
-                return true;
-            }
-            return false;
+            LayersToMake = Layers.Count; //actaully you can remove this, this is for module testing
         }
 
-        //public List<Nodes> RequestProof(byte value)
-        //{
+        /// <summary>
+        /// Checks if the Node is odd and adds a copy of the Left Node of The Last Node to the List
+        /// </summary>
+        public List<Node> CheckIfNodeCountIsOdd(List<Node> nodesToBeLayered)
+        {
+            if (!(nodesToBeLayered.Count == 1))
+            {
+                if (nodesToBeLayered.Count % 2 != 0)
+                {
+                    nodesToBeLayered.Add(Leaves.Last());
+                }
+            }
 
-        //    return 
-        //}
+            return nodesToBeLayered;
+        }
 
+        /// <summary>
+        /// Builds a new Layer based on how many nodes to make
+        /// </summary>
+        public List<Node> BuildNodeLayer(List<Node> NodesToBeAddLayer)
+        {
+            List<Node> NewNodeLayer = new List<Node>();
+
+            int j = 0;
+            for (int i = 0; i < CountOfNodesToMake; i++)
+            {
+                Node node = new Node();
+                node.Left = NodesToBeAddLayer[j];
+
+                if (CountOfNodesToMake != 1)
+                {
+                    j++;
+                }
+                 
+                node.Right = NodesToBeAddLayer[j];
+                node.Value = HashHandler.ComputeSha256Hash(node.Left.Value + node.Right.Value);
+
+                NewNodeLayer.Add(node);
+                j++;
+            }
+
+            return NewNodeLayer;
+        }
     }
 }

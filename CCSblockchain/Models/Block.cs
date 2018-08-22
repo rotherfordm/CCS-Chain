@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CCSblockchain.Models
+﻿namespace CCSblockchain.Models
 {
     public class Block
     {
