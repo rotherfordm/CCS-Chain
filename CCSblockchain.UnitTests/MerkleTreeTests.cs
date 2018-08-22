@@ -26,7 +26,7 @@ namespace CCSblockchain.UnitTests
             L1.Value = HashHandler.ComputeSha256Hash("test1");
             L2.Value = HashHandler.ComputeSha256Hash("test2");
             string test = L1.Value + L1.Value;
-            L1_L2.Value = HashHandler.ComputeSha256Hash(L1.Value + L1.Value);
+            L1_L2.Value = HashHandler.ComputeSha256Hash(L1.Value + L1.Value); 
 
             L3.Value = HashHandler.ComputeSha256Hash("test4");
             L4.Value = HashHandler.ComputeSha256Hash("test5");
