@@ -150,6 +150,7 @@
     <Compile Include="Models\HashHandler.cs" />
     <Compile Include="Models\MerkleTree.cs" />
     <Compile Include="Models\Node.cs" />
+    <Compile Include="Models\Transaction.cs" />
     <Compile Include="Models\Wallet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

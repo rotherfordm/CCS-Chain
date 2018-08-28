@@ -22,7 +22,7 @@ namespace CCSblockchain.Models
 
         public static string CalculateHashForBlock(Block block)
         {
-            return CalculateHash(block.Index.ToString(), block.PreviousHash, block.TimeStamp.ToString(), block.Data, block.Nonce);
+            return CalculateHash(block.Index.ToString(), block.PreviousBlockHash, block.DateCreated.ToString(), block.Data, block.Nonce);
         }
 
         public static string CalculateHash(string index, string previousHash, string timeStamp, string data, int nonce)

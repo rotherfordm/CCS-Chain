@@ -13,14 +13,14 @@ namespace CCSblockchain.Models
     /// </summary>
     public class MerkleTree
     {
-        public Node Root { set; get; }
-        public List<Node> Leaves { set; get; }
-        public List<List<Node>> Layers { set; get; }
+        public Leaf Root { set; get; }
+        public List<Leaf> Leaves { set; get; }
+        public List<List<Leaf>> Layers { set; get; }
         public double CountOfNodesToMake { set; get; }
 
         public int LayersToMake { set; get; }
 
-        public MerkleTree(List<Node> Leaves)
+        public MerkleTree(List<Leaf> Leaves)
         {
             this.Leaves = Leaves;
             CountOfNodesToMake = Leaves.Count;
@@ -62,8 +62,8 @@ namespace CCSblockchain.Models
         {
             SetLayersToMake();
 
-            List<Node> NodesToBeAddLayer = Leaves;
-            Layers = new List<List<Node>>();
+            List<Leaf> NodesToBeAddLayer = Leaves;
+            Layers = new List<List<Leaf>>();
             Layers.Add(Leaves);
 
             for (int i = 1; LayersToMake > i; LayersToMake--)
@@ -78,7 +78,7 @@ namespace CCSblockchain.Models
         /// <summary>
         /// Checks if the Node is odd and adds a copy of the Left Node of The Last Node to the List
         /// </summary>
-        public List<Node> CheckIfNodeCountIsOdd(List<Node> nodesToBeLayered)
+        public List<Leaf> CheckIfNodeCountIsOdd(List<Leaf> nodesToBeLayered)
         {
             if (!(nodesToBeLayered.Count == 1))
             {
@@ -94,14 +94,14 @@ namespace CCSblockchain.Models
         /// <summary>
         /// Builds a new Layer based on how many nodes to make
         /// </summary>
-        public List<Node> BuildNodeLayer(List<Node> NodesToBeAddLayer)
+        public List<Leaf> BuildNodeLayer(List<Leaf> NodesToBeAddLayer)
         {
-            List<Node> NewNodeLayer = new List<Node>();
+            List<Leaf> NewNodeLayer = new List<Leaf>();
 
             int j = 0;
             for (int i = 0; i < CountOfNodesToMake; i++)
             {
-                Node node = new Node();
+                Leaf node = new Leaf();
                 node.Left = NodesToBeAddLayer[j];
 
                 if (CountOfNodesToMake != 1)
@@ -111,7 +111,7 @@ namespace CCSblockchain.Models
                  
                 node.Right = NodesToBeAddLayer[j];
                 node.Value = HashHandler.ComputeSha256Hash(node.Left.Value + node.Right.Value);
-
+                
                 NewNodeLayer.Add(node);
                 j++;
             }

@@ -44,15 +44,15 @@ namespace CCSblockchain.Models
                 Console.WriteLine("invalid index");
                 return false;
             }
-            else if (prevBlock.Hash != newBlock.PreviousHash)
+            else if (prevBlock.BlockDataHash != newBlock.PreviousBlockHash)
             {
                 Console.WriteLine("invalid previous hash");
                 return false;
             }
-            else if (HashHandler.CalculateHashForBlock(newBlock) != newBlock.Hash)
+            else if (HashHandler.CalculateHashForBlock(newBlock) != newBlock.BlockDataHash)
             {
-                Console.WriteLine(newBlock.Hash + ' ' + HashHandler.CalculateHashForBlock(newBlock));
-                Console.WriteLine("invalid hash: " + HashHandler.CalculateHashForBlock(newBlock) + ' ' + newBlock.Hash);
+                Console.WriteLine(newBlock.BlockDataHash + ' ' + HashHandler.CalculateHashForBlock(newBlock));
+                Console.WriteLine("invalid hash: " + HashHandler.CalculateHashForBlock(newBlock) + ' ' + newBlock.BlockDataHash);
                 return false;
             }
             return true;
@@ -61,20 +61,20 @@ namespace CCSblockchain.Models
         private Block MineBlock(string data)
         {
             Block previousBlock = PreviousBlock();
-            int nextIndex = previousBlock.Index + 1;
+            uint nextIndex = previousBlock.Index + 1;
             int nonce = 0;
             long nextTimestamp = DateTime.Now.Ticks / 1000;
-            string nextHash = HashHandler.CalculateHash(nextIndex.ToString(), previousBlock.Hash, nextTimestamp.ToString(), data.ToString(), nonce);
+            string nextHash = HashHandler.CalculateHash(nextIndex.ToString(), previousBlock.BlockDataHash, nextTimestamp.ToString(), data.ToString(), nonce);
 
             string zeros = new string('0', difficulty);
             while (nextHash.Substring(0, difficulty) != zeros)
             {
                 nonce++;
                 nextTimestamp = DateTime.Now.Ticks / 1000;
-                nextHash = HashHandler.CalculateHash(nextIndex.ToString(), previousBlock.Hash, nextTimestamp.ToString(), data, nonce);
+                nextHash = HashHandler.CalculateHash(nextIndex.ToString(), previousBlock.BlockDataHash, nextTimestamp.ToString(), data, nonce);
             }
 
-            return new Block(nextIndex, previousBlock.Hash, nextTimestamp, data, nextHash, difficulty, nonce);
+            return new Block(nextIndex, previousBlock.BlockDataHash, nextTimestamp, data, nextHash, difficulty, nonce);
         }
     }
 }

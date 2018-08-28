@@ -1,24 +1,39 @@
-﻿namespace CCSblockchain.Models
+﻿using System.Collections.Generic;
+
+namespace CCSblockchain.Models
 {
     public class Block
     {
-        public int Index { get; set; }
-        public string PreviousHash { get; set; }
-        public long TimeStamp { get; set; }
-        public string Data { get; set; }
-        public string Hash { get; set; }
-        public int Difficulty { get; set; }
-        public int Nonce { get; set; }
+        public uint Index { get; set; }
+        public List<Transaction> Transactions { set; get; }
+        public uint Difficulty { get; set; }
+        public string PreviousBlockHash { get; set; }
+        public string MinedBy { set; get; }
+        
+        public string BlockDataHash { get; set; } //Created Automatically using the var above
 
-        public Block(int index, string prevHash, long timeStamp, string data, string hash, int difficulty, int nonce)
+        //Assigned By Miners
+        public long DateCreated { get; set; }
+        public uint Nonce { set; get; }
+        public string BlockHash { set; get; }
+       
+        public Block(uint Index, 
+                    List<Transaction> Transactions, 
+                    uint Difficulty, 
+                    string PreviousBlockHash,
+                    string MinedBy,
+                    string BlockDataHash,
+                    long DateCreated,
+                    uint Nonce)
         {
-            this.Index = index;
-            this.PreviousHash = prevHash;
-            this.TimeStamp = timeStamp;
-            this.Data = data;
-            this.Hash = hash;
-            this.Difficulty = difficulty;
-            this.Nonce = nonce;
+            this.Index = Index;
+            this.Transactions = Transactions;
+            this.Difficulty = Difficulty;
+            this.PreviousBlockHash = PreviousBlockHash;
+            this.MinedBy = MinedBy;
+            this.BlockDataHash = BlockDataHash;
+            this.DateCreated = DateCreated;
+            this.Nonce = Nonce;
         }
     }
 }

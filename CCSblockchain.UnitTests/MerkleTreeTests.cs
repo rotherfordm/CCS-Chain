@@ -12,15 +12,15 @@ namespace CCSblockchain.UnitTests
         [TestMethod]
         public void Node_ManualSetCheck_Equal()
         {
-            Node L1 = new Node();
-            Node L2 = new Node();
-            Node L1_L2 = new Node();
+            Leaf L1 = new Leaf();
+            Leaf L2 = new Leaf();
+            Leaf L1_L2 = new Leaf();
 
-            Node L3 = new Node();
-            Node L4 = new Node();
-            Node L3_L4 = new Node();
+            Leaf L3 = new Leaf();
+            Leaf L4 = new Leaf();
+            Leaf L3_L4 = new Leaf();
 
-            Node MerkleRoot = new Node();
+            Leaf MerkleRoot = new Leaf();
 
             //Set Values
             L1.Value = HashHandler.ComputeSha256Hash("test1");
@@ -85,11 +85,11 @@ namespace CCSblockchain.UnitTests
             /// 5 / 2 = 2.5 // L3
             /// 3 / 2 = 1.5 // L4
             /// 2 / 2 = 1 //L5
-            List<Node> Leaves = new List<Node>();
+            List<Leaf> Leaves = new List<Leaf>();
 
             for (int x = 0; x < 10; x++)
             {
-                Leaves.Add(new Node(x.ToString()));
+                Leaves.Add(new Leaf(x.ToString()));
             }
 
             int ExpectedLayersToMake = 5;
@@ -110,11 +110,11 @@ namespace CCSblockchain.UnitTests
             /// 5 / 2 = 2.5 // L3
             /// 3 / 2 = 1.5 // L4
             /// 2 / 2 = 1 //L5
-            List<Node> Leaves = new List<Node>();
+            List<Leaf> Leaves = new List<Leaf>();
 
             for (int x = 0; x < 10; x++)
             {
-                Leaves.Add(new Node(x.ToString()));
+                Leaves.Add(new Leaf(x.ToString()));
             }
 
             int ExpectedLayersToMake = 5;
@@ -129,11 +129,11 @@ namespace CCSblockchain.UnitTests
         public void MerkleTree_CountOfNodesToMake_AreEqual()
         {
             //Given 20 Leaves Count how many Nodes to make per layer
-            List<Node> Leaves = new List<Node>();
+            List<Leaf> Leaves = new List<Leaf>();
 
             for (int x = 0; x < 20; x++)
             {
-                Leaves.Add(new Node(x.ToString()));
+                Leaves.Add(new Leaf(x.ToString()));
             }
 
             MerkleTree merkleTree = new MerkleTree(Leaves);
