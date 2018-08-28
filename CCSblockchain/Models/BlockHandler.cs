@@ -7,13 +7,16 @@ namespace CCSblockchain.Models
 {
     public class BlockHandler
     {
-        List<Block> blocks = new List<Block>();
+        List<Block> blocks;
         static int difficulty = 4;
+
+        List<Transaction> transactions;
+        static string minerAddress = "";
 
         public BlockHandler()
         {
             AddBlock(GetGenesisBlock());
-            AddBlock(MineBlock("Sample Data"));
+            AddBlock(MineBlock(transactions));
 
             string strJson = JsonConvert.SerializeObject(PreviousBlock(), Formatting.Indented);
             Console.WriteLine(strJson);
@@ -42,6 +45,11 @@ namespace CCSblockchain.Models
             }
         }
 
+        public void AddTransaction(Transaction newTransaction)
+        {
+            transactions.Add(newTransaction);
+        }
+
         public static bool IsValidNewBlock(Block newBlock, Block prevBlock)
         {
             if (prevBlock.Index + 1 != newBlock.Index)
@@ -68,14 +76,11 @@ namespace CCSblockchain.Models
             //TODO: FIX THIS
             Block previousBlock = PreviousBlock();
             uint nextIndex = previousBlock.Index + 1;
-            int nonce = 0;
+            uint nonce = 0;
             long nextTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-            Block newBlock = new Block();
-            newBlock.Transactions = transactions;
-
             //instantiate 
-            string nextHash = HashHandler.CalculateHashForBlock(newBlock);
+            string nextHash = HashHandler.CalculateHash();
 
             //add difficulty
             string zeros = new string('0', difficulty);
@@ -85,11 +90,12 @@ namespace CCSblockchain.Models
                 nextTimestamp = DateTime.Now.Ticks / 1000;
                 nextHash = HashHandler.CalculateHash();
             }
-
-            return new Block(nextIndex, 
-                             previousBlock.BlockDataHash,
-                             nextTimestamp, 
-                             data, 
+            //get miner address
+            return new Block(nextIndex,
+                             transactions,
+                             difficulty,
+                             previousBlock.BlockHash,
+                             minerAddress, 
                              nextHash,
                              difficulty,
                              nonce);

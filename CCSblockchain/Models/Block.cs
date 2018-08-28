@@ -6,7 +6,7 @@ namespace CCSblockchain.Models
     {
         public uint Index { get; set; }
         public List<Transaction> Transactions { set; get; }
-        public uint Difficulty { get; set; }
+        public int Difficulty { get; set; }
         public string PreviousBlockHash { get; set; }
         public string MinedBy { set; get; }
         
@@ -31,7 +31,7 @@ namespace CCSblockchain.Models
         
         public Block(uint Index, 
                     List<Transaction> Transactions, 
-                    uint Difficulty, 
+                    int Difficulty, 
                     string PreviousBlockHash,
                     string MinedBy,
                     string BlockDataHash,
