@@ -101,7 +101,7 @@ namespace Instance2
 
                     SendPersonalNodeData(client);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     WriteLine($"Can't connect to {node.ipAddress}:{node.port}");
                 }

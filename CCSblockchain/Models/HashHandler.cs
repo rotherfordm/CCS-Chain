@@ -22,12 +22,27 @@ namespace CCSblockchain.Models
 
         public static string CalculateHashForBlock(Block block)
         {
-            return CalculateHash(block.Index.ToString(), block.PreviousBlockHash, block.DateCreated.ToString(), block.Data, block.Nonce);
+            //Concat all of the hashtransactions
+            string transactionHash = "";
+
+            foreach (Transaction transaction in block.Transactions)
+            {
+                transactionHash = transaction.TransactionDataHash + transaction;
+            }
+
+            return ComputeSha256Hash(block.Index + transactionHash + block.Difficulty + block.PreviousBlockHash + block.MinedBy);
         }
 
-        public static string CalculateHash(string index, string previousHash, string timeStamp, string data, int nonce)
+        public static string CalculateHashForTransaction(Transaction transaction)
         {
-            return ComputeSha256Hash(index + previousHash + timeStamp + data + nonce);
+            return ComputeSha256Hash(transaction.AddressFrom +
+                                     transaction.AddressTo +
+                                     transaction.Value +
+                                     transaction.Fee +
+                                     transaction.DateCreated + 
+                                     transaction.Data + 
+                                     transaction.SenderPublicKey);
         }
+
     }
 }

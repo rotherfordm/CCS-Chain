@@ -2,7 +2,6 @@
 {
     public class Transaction
     {
-
         public string AddressFrom { set; get; }
         public string AddressTo { set; get; }
         public uint Value { set; get; }

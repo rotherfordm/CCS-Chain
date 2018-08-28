@@ -63,24 +63,36 @@ namespace CCSblockchain.Models
             return true;
         }
 
-        private Block MineBlock(string data)
+        private Block MineBlock(List<Transaction> transactions)
         {
+            //TODO: FIX THIS
             Block previousBlock = PreviousBlock();
             uint nextIndex = previousBlock.Index + 1;
             int nonce = 0;
-            long nextTimestamp = DateTime.Now.Ticks / 1000;
-            string nextHash = HashHandler.CalculateHash(nextIndex.ToString(), previousBlock.BlockDataHash, nextTimestamp.ToString(), data.ToString(), nonce);
+            long nextTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
+            Block newBlock = new Block();
+            newBlock.Transactions = transactions;
+
+            //instantiate 
+            string nextHash = HashHandler.CalculateHashForBlock(newBlock);
+
+            //add difficulty
             string zeros = new string('0', difficulty);
             while (nextHash.Substring(0, difficulty) != zeros)
             {
                 nonce++;
                 nextTimestamp = DateTime.Now.Ticks / 1000;
-                nextHash = HashHandler.CalculateHash(nextIndex.ToString(), previousBlock.BlockDataHash, nextTimestamp.ToString(), data, nonce);
+                nextHash = HashHandler.CalculateHash();
             }
 
             return new Block(nextIndex, 
-                previousBlock.BlockDataHash, nextTimestamp, data, nextHash, difficulty, nonce);
+                             previousBlock.BlockDataHash,
+                             nextTimestamp, 
+                             data, 
+                             nextHash,
+                             difficulty,
+                             nonce);
         }
     }
 }

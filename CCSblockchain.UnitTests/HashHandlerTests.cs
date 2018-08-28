@@ -20,11 +20,11 @@ namespace CCSblockchain.UnitTests
         [TestMethod]
         public void CalculateHash_AreEqual_True()
         {
-            int index = 2;
+            uint index = 2;
             string previousHash = "b8921348ed613a01d5ace11c754f459214b6f81d5e7937354c561eb25fb9e7ce";
             string timeStamp = "1512845815";
             string data = "Test Block";
-            int nonce = 0;
+            uint nonce = 0;
             string ExpectedOutput = "1d2fbc9e5b458798d667b24386f6a76f0bd24268e184e209bf4cc51d6168b24e";
             string Output = HashHandler.CalculateHash(index.ToString(), previousHash, timeStamp, data, nonce);
             string ErrorFeedback = $"Incorrect Values: Expected - {ExpectedOutput}, Received - {Output} ";
@@ -34,7 +34,7 @@ namespace CCSblockchain.UnitTests
         [TestMethod]
         public void CalculateHashForBlock_AreEqual_True()
         {
-            int index = 2;
+            uint index = 2;
             string previousHash = "b8921348ed613a01d5ace11c754f459214b6f81d5e7937354c561eb25fb9e7ce";
             long timeStamp = 1512845815;
             string data = "Test Block";
