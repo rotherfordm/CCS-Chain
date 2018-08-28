@@ -6,6 +6,7 @@
         public Leaf Left { set; get; }
         public Leaf Right { set; get; }
         public Leaf Parent { set; get; }
+        
 
         public Leaf()
         {

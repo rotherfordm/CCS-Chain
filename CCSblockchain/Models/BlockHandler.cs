@@ -21,7 +21,12 @@ namespace CCSblockchain.Models
 
         public Block GetGenesisBlock()
         {
-            return new Block(0, "0", 1465154705, "my genesis block!!", "816534932c2b7154836da6afc367695e6337db8a921823784c14378abed4f7d7", 0, 0);
+            //blockhash = ccschain genesisblock 
+            return new Block(0, null, 0, null,
+                            "0000000000000000000000000000000000000000",
+                            "f06a803d1ad2561c20465d9fd530e1d4d363fd9a20fec722909fae74ca2ea418",
+                            DateTimeOffset.UtcNow.ToUnixTimeSeconds(), 0);
+
         }
 
         private Block PreviousBlock()
@@ -74,7 +79,8 @@ namespace CCSblockchain.Models
                 nextHash = HashHandler.CalculateHash(nextIndex.ToString(), previousBlock.BlockDataHash, nextTimestamp.ToString(), data, nonce);
             }
 
-            return new Block(nextIndex, previousBlock.BlockDataHash, nextTimestamp, data, nextHash, difficulty, nonce);
+            return new Block(nextIndex, 
+                previousBlock.BlockDataHash, nextTimestamp, data, nextHash, difficulty, nonce);
         }
     }
 }
