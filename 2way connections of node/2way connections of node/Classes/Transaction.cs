@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _2way_connections_of_node
+namespace AeternumNode
 {
     class Transaction
     {
@@ -24,6 +24,5 @@ namespace _2way_connections_of_node
         {
 
         }
-
     }
 }

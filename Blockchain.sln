@@ -7,11 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCSblockchain", "CCSblockch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miner", "Miner\Miner\Miner.csproj", "{A6B043C2-C592-434B-BF33-4E83AD179F18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2way connections of node", "2way connections of node\2way connections of node\2way connections of node.csproj", "{8C822324-36EE-4D96-857A-06F4BCF61990}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Instance 2", "2way connections of node\Instance 2\Instance 2.csproj", "{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Instance 3", "2way connections of node\Instance 3\Instance 3.csproj", "{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aeternum Node", "2way connections of node\2way connections of node\Aeternum Node.csproj", "{8C822324-36EE-4D96-857A-06F4BCF61990}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCSblockchain.UnitTests", "CCSblockchain.UnitTests\CCSblockchain.UnitTests.csproj", "{C0157956-E40C-43CE-9DD3-C02746BCBA3C}"
 EndProject
@@ -75,38 +71,6 @@ Global
 		{8C822324-36EE-4D96-857A-06F4BCF61990}.Release|x64.Build.0 = Release|Any CPU
 		{8C822324-36EE-4D96-857A-06F4BCF61990}.Release|x86.ActiveCfg = Release|Any CPU
 		{8C822324-36EE-4D96-857A-06F4BCF61990}.Release|x86.Build.0 = Release|Any CPU
-		{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}.Debug|ARM.Build.0 = Debug|Any CPU
-		{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}.Debug|x64.Build.0 = Debug|Any CPU
-		{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}.Debug|x86.Build.0 = Debug|Any CPU
-		{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}.Release|ARM.ActiveCfg = Release|Any CPU
-		{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}.Release|ARM.Build.0 = Release|Any CPU
-		{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}.Release|x64.ActiveCfg = Release|Any CPU
-		{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}.Release|x64.Build.0 = Release|Any CPU
-		{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}.Release|x86.ActiveCfg = Release|Any CPU
-		{B6F17718-8A1E-47D8-A75B-D587C1B0F9AA}.Release|x86.Build.0 = Release|Any CPU
-		{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}.Debug|ARM.Build.0 = Debug|Any CPU
-		{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}.Debug|x64.Build.0 = Debug|Any CPU
-		{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}.Debug|x86.Build.0 = Debug|Any CPU
-		{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}.Release|ARM.ActiveCfg = Release|Any CPU
-		{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}.Release|ARM.Build.0 = Release|Any CPU
-		{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}.Release|x64.ActiveCfg = Release|Any CPU
-		{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}.Release|x64.Build.0 = Release|Any CPU
-		{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}.Release|x86.ActiveCfg = Release|Any CPU
-		{266C0DB5-FFE5-43C2-81A0-DC16A97B5E3F}.Release|x86.Build.0 = Release|Any CPU
 		{C0157956-E40C-43CE-9DD3-C02746BCBA3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C0157956-E40C-43CE-9DD3-C02746BCBA3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0157956-E40C-43CE-9DD3-C02746BCBA3C}.Debug|ARM.ActiveCfg = Debug|Any CPU

@@ -10,11 +10,19 @@ using static System.Console;
 using System.Threading;
 using Newtonsoft.Json;
 using System.IO;
+using AeternumNode;
 
-namespace _2way_connections_of_node
+namespace AeternumNode
 {
     class Program
     {
+        // Blockchain
+        List<Block> blockChain = new List<Block>();
+
+        // Variables
+        public static string serverIpAddress = "";
+        public static int serverPort;
+
         // Server
         static TcpListener server;
 
@@ -24,20 +32,25 @@ namespace _2way_connections_of_node
         // List of Server
         static List<TcpClient> listServers = new List<TcpClient>();
 
+        // List of Threads;
+        static List<Thread> clientThreads = new List<Thread>();
+
         static void Main(string[] args)
         {
             // Start Server
             ServerStart();
-            FirstConnection();
+            
 
             Thread tA = new Thread(new ThreadStart(WaitClientConnection));
-            Thread tB = new Thread(new ThreadStart(AcceptDataFromClient));
+            //Thread tB = new Thread(new ThreadStart(AcceptDataFromClient));
             Thread tC = new Thread(new ThreadStart(SendDataToServers));
-            Thread tD = new Thread(new ThreadStart(CheckClients));
+            //Thread tD = new Thread(new ThreadStart(CheckClients));
             tA.Start();
-            tB.Start();
+            //tB.Start();
             tC.Start();
-            tD.Start();
+            //tD.Start();
+
+            FirstConnection();
 
         }
 
@@ -56,35 +69,42 @@ namespace _2way_connections_of_node
 
         static void SendPersonalNodeData(TcpClient client)
         {
-            string filePath = Directory.GetCurrentDirectory() + @"\Data\My_Node_Data.json";
-            string fileData = "%NodeData%" + File.ReadAllText(filePath);
+            //string filePath = Directory.GetCurrentDirectory() + @"\Data\My_Node_Data.json";
+            //string fileData = "%NodeData%" + File.ReadAllText(filePath);
+            string myNodeData = $"%NODEDATA%{serverIpAddress},{serverPort}";
 
-            SendData(fileData, client);
+            SendData(myNodeData, client);
         }
 
 
         static void ServerStart()
         {
-            string filePath = Directory.GetCurrentDirectory() + @"\Data\My_Node_Data.json";
-            string fileData = File.ReadAllText(filePath);
+            //string filePath = Directory.GetCurrentDirectory() + @"\Data\My_Node_Data.json";
+            //string fileData = File.ReadAllText(filePath);
 
-            NodeData myData = JsonConvert.DeserializeObject<NodeData>(fileData);
+            //NodeData myData = JsonConvert.DeserializeObject<NodeData>(fileData);
+
+            Write("Enter IP Address: ");
+            serverIpAddress = ReadLine();
+            Write("Enter Port: ");
+            serverPort = int.Parse(ReadLine());
+
 
             try
             {
-                server = new TcpListener(IPAddress.Parse(myData.ipAddress), int.Parse(myData.port));
+                server = new TcpListener(IPAddress.Parse(serverIpAddress), serverPort);
                 server.Start();
-                WriteLine($"Server {server.Server.LocalEndPoint} started!");
+                WriteLine($"{AppendTime()}Server {server.Server.LocalEndPoint} started!");
             }
             catch (Exception e)
             {
-                WriteLine($"Error starting server: {e.ToString()}");
+                WriteLine($"{AppendTime()}Error starting server: {e.ToString()}");
             }
         }
 
         static void FirstConnection()
         {
-            WriteLine("Trying to connect to Initial Peers...");
+            WriteLine($"{AppendTime()}Trying to connect to Initial Peers...");
             string filePath = Directory.GetCurrentDirectory() + @"\Data\Initial_Peers.json";
             string fileData = File.ReadAllText(filePath);
 
@@ -94,15 +114,18 @@ namespace _2way_connections_of_node
             {
                 try
                 {
-                    TcpClient client = new TcpClient(node.ipAddress, int.Parse(node.port));
-                    WriteLine($"Successfully connected to {node.ipAddress}:{node.port}");
-                    listServers.Add(client);
+                    if (node.port != serverPort.ToString())
+                    {
+                        TcpClient client = new TcpClient(node.ipAddress, int.Parse(node.port));
+                        WriteLine($"{AppendTime()}Successfully connected to {node.ipAddress}:{node.port}");
+                        listServers.Add(client);
 
-                    SendPersonalNodeData(client);
+                        SendPersonalNodeData(client);
+                    }
                 }
                 catch (Exception e)
                 {
-                    WriteLine($"Can't connect to {node.ipAddress}:{node.port}");
+                    WriteLine($"{AppendTime()}Can't connect to {node.ipAddress}:{node.port}");
                 }
             }
         }
@@ -110,157 +133,182 @@ namespace _2way_connections_of_node
         static void WaitClientConnection()
         {          
 
-            WriteLine("Waiting for connections...");
+            WriteLine($"{AppendTime()}Waiting for connections...");
             while (true)
             {
                 // Accept connections
                 TcpClient client = server.AcceptTcpClient();
-                WriteLine($"{client.Client.RemoteEndPoint} connected successfully!");
+
+                clientThreads.Add(new Thread(() => HandleClient(client)));
+                clientThreads.Last().Start();
+
+                WriteLine($"{AppendTime()}{client.Client.RemoteEndPoint} connected successfully!");
 
                 // Add the client to the list of clients
                 listClients.Add(client);
             }
         }
 
-        static void AcceptDataFromClient()
+        static void HandleClient(TcpClient _client)
         {
+            NetworkStream stream = _client.GetStream();
+
             while (true)
             {
-                if (listClients.Count != 0)
+                if (stream.DataAvailable)
                 {
-                    for (int i = 0; i < listClients.Count; i++)
-                    {
-                        try
-                        {
-                            TcpClient client = listClients[i];
+                    byte[] dataByte = new byte[_client.Available];
 
-                            NetworkStream stream = client.GetStream();
+                    stream.Read(dataByte, 0, dataByte.Length);
 
-                            if (stream.DataAvailable)
-                            {
-                                byte[] dataByte = new byte[client.Available];
-
-                                stream.Read(dataByte, 0, dataByte.Length);
-
-
-                                //Sending automatic reply=====================
-                                //string replystring = "Transaction Completed";
-                                //byte[] reply = new byte[replystring.Length];
-
-                                //reply = Encoding.ASCII.GetBytes(replystring);
-                                //stream.Write(reply, 0, reply.Length);
-                                //========================
-
-                                string dataString = Encoding.ASCII.GetString(dataByte);
-                                ProcessData(dataString);
-                                
-
-                                WriteLine(dataString);
-
-                                //WriteLine(StripHeaderFromData(dataString));
-                                //SampleSend(/*ProcessReceivedData(*/dataString/*)*/);
-
-                                //ProcessTransaction(StripHeaderFromData(dataString));
-
-                            }
-                        }
-                        catch { }
-
-
-                    }
+                    string dataString = Encoding.ASCII.GetString(dataByte);
+                    ProcessData(dataString);
                 }
             }
         }
 
+        //static void AcceptDataFromClient()
+        //{
+        //    while (true)
+        //    {
+        //        if (listClients.Count != 0)
+        //        {
+        //            for (int i = 0; i < listClients.Count; i++)
+        //            {
+        //                try
+        //                {
+        //                    TcpClient client = listClients[i];
+
+        //                    NetworkStream stream = client.GetStream();
+
+        //                    if (stream.DataAvailable)
+        //                    {
+        //                        byte[] dataByte = new byte[client.Available];
+
+        //                        stream.Read(dataByte, 0, dataByte.Length);
+
+
+        //                        //Sending automatic reply=====================
+        //                        //string replystring = "Transaction Completed";
+        //                        //byte[] reply = new byte[replystring.Length];
+
+        //                        //reply = Encoding.ASCII.GetBytes(replystring);
+        //                        //stream.Write(reply, 0, reply.Length);
+        //                        //========================
+
+        //                        string dataString = Encoding.ASCII.GetString(dataByte);
+        //                        ProcessData(dataString);
+                                
+
+        //                        WriteLine(dataString);
+
+        //                        //WriteLine(StripHeaderFromData(dataString));
+        //                        //SampleSend(/*ProcessReceivedData(*/dataString/*)*/);
+
+        //                        //ProcessTransaction(StripHeaderFromData(dataString));
+
+        //                    }
+        //                }
+        //                catch { }
+
+
+        //            }
+        //        }
+        //    }
+        //}
+
         static void ProcessData(string x)
         {
 
-            if (x.Contains("NodeData"))
+            if (x.Contains("%NODEDATA%"))
             {
                 ReciprocateConnection(x);
             }
             else
             {
-                
+                WriteLine(x);
             }
 
 
         }
 
+        static string AppendTime()
+        {
+            return $"{DateTime.Now.ToString("HH:mm:ss tt")} >> ";
+        }
+
         static void ReciprocateConnection(string x)
         {
-            string input = x.Replace("%NodeData%", "");
-
-            NodeData nodeData = JsonConvert.DeserializeObject<NodeData>(input);
+            string[] input = x.Replace("%NODEDATA%", "").Split(',');
 
             try
             {
-                TcpClient client = new TcpClient(nodeData.ipAddress, int.Parse(nodeData.port));
+                TcpClient client = new TcpClient(input[0], int.Parse(input[1]));
                 
-                WriteLine($"Successfullly connected to {client.Client.RemoteEndPoint}");
+                WriteLine($"{AppendTime()}Successfullly connected to {client.Client.RemoteEndPoint}");
 
                 listServers.Add(client);
             }
             catch
             {
-                WriteLine($"Connection to {nodeData.ipAddress}:{nodeData.port} can't be established!");
+                WriteLine($"{AppendTime()}Connection to {input[0]}:{input[1]} can't be established!");
             }
 
         }
 
-        static string ParseDataToJsonString(string x)
-        {
-            string[] raw = x.Split();
-            string input = "";
-            bool checker = false;
+        //static string ParseDataToJsonString(string x)
+        //{
+        //    string[] raw = x.Split();
+        //    string input = "";
+        //    bool checker = false;
 
-            if (x.Contains('['))
-            {
-                // Reserverd for Json array
-            }
-            else if (x.Contains('%'))
-            {
-                foreach (string ch in raw)
-                {
-                    if (ch == "%")
-                        checker = true;
-                    else if (ch == "}")
-                    {
-                        input += ch;
-                        checker = false;
-                    }
+        //    if (x.Contains('['))
+        //    {
+        //        // Reserverd for Json array
+        //    }
+        //    else if (x.Contains('%'))
+        //    {
+        //        foreach (string ch in raw)
+        //        {
+        //            if (ch == "%")
+        //                checker = true;
+        //            else if (ch == "}")
+        //            {
+        //                input += ch;
+        //                checker = false;
+        //            }
 
-                    if (checker)
-                        input += ch;
-                }
-            }
-            else
-            {
-                foreach (string ch in raw)
-                {
-                    if (ch == "{")
-                        checker = true;
-                    else if (ch == "}")
-                    {
-                        input += ch;
-                        checker = false;
-                    }
+        //            if (checker)
+        //                input += ch;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        foreach (string ch in raw)
+        //        {
+        //            if (ch == "{")
+        //                checker = true;
+        //            else if (ch == "}")
+        //            {
+        //                input += ch;
+        //                checker = false;
+        //            }
 
-                    if (checker)
-                        input += ch;
-                }
-            }
+        //            if (checker)
+        //                input += ch;
+        //        }
+        //    }
 
-            return input;
-        }
+        //    return input;
+        //}
 
-        static void ProcessTransaction(string x)
-        {
-            Transaction jsonDeserialized = JsonConvert.DeserializeObject<Transaction>(x);
+        //static void ProcessTransaction(string x)
+        //{
+        //    Transaction jsonDeserialized = JsonConvert.DeserializeObject<Transaction>(x);
 
-            WriteLine(jsonDeserialized.data);
+        //    WriteLine(jsonDeserialized.data);
             
-        }
+        //}
 
         static void SendDataToServers()
         {
