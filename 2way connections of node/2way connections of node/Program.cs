@@ -180,6 +180,11 @@ namespace AeternumNode
                     // Data
                     string _result = ProcessData(dataString, _client);
 
+                    // BroadCast
+
+                    if (!dataString.Contains("%NODEDATA%"))
+                        BroadCastToOtherNodes(dataString);
+
                     if (_result !=  "NAN")
                     {
                         byte[] sendData = Encoding.ASCII.GetBytes(_result);
@@ -199,9 +204,7 @@ namespace AeternumNode
             else if (x.Contains("%NEWWALLET%"))
             {
                 NewWalletCreated(x);
-
-                // BroadCast
-                BroadCastToOtherNodes(x);
+  
                 return "Successfully Created a New Wallet!";
             }
             else if (x.Contains("%GETBALANCE%"))
@@ -223,8 +226,6 @@ namespace AeternumNode
                 {
                     WriteLine($"{AppendTime()}New Block was found!");
 
-                    // BroadCast
-                    BroadCastToOtherNodes(x);
                     return "Sucessfully Created a new block!";
                 }
                 else
@@ -235,8 +236,7 @@ namespace AeternumNode
                 if (SendCoins(x))
                 {
                     WriteLine($"{AppendTime()}New Pending Transaction Received!");
-                    // BroadCast
-                    BroadCastToOtherNodes(x);
+
                     return "Transaction Pending!";
                 }
                 else
