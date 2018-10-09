@@ -200,6 +200,9 @@ namespace AeternumNode
             else if (x.Contains("%NEWWALLET%"))
             {
                 NewWalletCreated(x);
+
+                // BroadCast
+                BroadCastToOtherNodes(x);
                 return "Successfully Created a New Wallet!";
             }
             else if (x.Contains("%GETBALANCE%"))
@@ -221,6 +224,9 @@ namespace AeternumNode
                 if (CreateNewBlock(x))
                 {
                     WriteLine($"{AppendTime()}New Block was found!");
+
+                    // BroadCast
+                    BroadCastToOtherNodes(x);
                     return "Sucessfully Created a new block!";
                 }
                 else
@@ -231,6 +237,8 @@ namespace AeternumNode
                 if (SendCoins(x))
                 {
                     WriteLine($"{AppendTime()}New Pending Transaction Received!");
+                    // BroadCast
+                    BroadCastToOtherNodes(x);
                     return "Transaction Pending!";
                 }
                 else
@@ -242,12 +250,29 @@ namespace AeternumNode
             {
                 return GetExplorerDetails();
             }
+            else if (x.Contains("%SYNCBLOCKCHAIN%"))
+            {
+                return SyncNodes();
+            }
             else
             {
-                WriteLine(x);
+                //WriteLine(x);
+                //return "NAN";
                 return "NAN";
             }
 
+        }
+
+        static string SyncNodes()
+        {
+            string data = "%SYNCBLOCKCHAIN%";
+
+            foreach (Block block in blockChain)
+            {
+                data += $"{block.index},{block.previousHash},{block.timeStamp},{block.data},{block.hash},{block.difficulty},{block.nonce}%";
+            }
+
+            return data;
         }
 
         static string GetExplorerDetails()
@@ -444,11 +469,75 @@ namespace AeternumNode
                             WriteLine(dataString);
                         }
 
-
                     }
 
                 }
             }
+        }
+
+        static void BroadCastToOtherNodes(string data)
+        {
+            //while (true)
+            //{
+            //string data = ReadLine();
+
+            foreach (TcpClient client in listServers)
+            {
+                // Start a network stream
+                NetworkStream stream = client.GetStream();
+
+                byte[] sendData = Encoding.ASCII.GetBytes(data);
+
+                if (sendData.Length != 0)
+                {
+                    stream.Write(sendData, 0, sendData.Length);
+
+                    //ADDED
+                    Thread.Sleep(1000);
+                    if (stream.DataAvailable)
+                    {
+                        byte[] dataByte = new byte[client.Available];
+
+                        stream.Read(dataByte, 0, dataByte.Length);
+
+                        string dataString = Encoding.ASCII.GetString(dataByte);
+
+                        WriteLine(dataString);
+                    }
+
+                }
+
+            }
+            //}
+        }
+
+        private static void ProcessSync(string _data)
+        {
+            if (_data.Contains("%SYNCBLOCKCHAIN%"))
+            {
+                _data = _data.Replace("%SYNCBLOCKCHAIN%", "");
+                SynBlockChain(_data);
+            }
+        }
+
+        private static void SynBlockChain(string _data)
+        {
+            string[] data = _data.Split('%');
+            
+            for (int i = 1; i < data.Length; i++)
+            {
+                string[] procData = data[i].Split(',');
+
+                blockChain.Add(new Block() {
+                    index = int.Parse(procData[0]),
+                    previousHash = procData[1],
+                    timeStamp = long.Parse(procData[2]),
+                    hash = procData[4],
+                    difficulty = int.Parse(procData[5]),
+                    nonce = int.Parse(procData[6])
+                });
+            }
+           
         }
 
         public static void CheckClients()
