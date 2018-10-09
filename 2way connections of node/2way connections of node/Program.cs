@@ -230,6 +230,7 @@ namespace AeternumNode
             {
                 if (SendCoins(x))
                 {
+                    WriteLine($"{AppendTime()}New Pending Transaction Received!");
                     return "Transaction Pending!";
                 }
                 else
