@@ -201,5 +201,10 @@ namespace Miner
             int i = 0;
             blocks.Add(MineBlock((i += 5).ToString()));
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
