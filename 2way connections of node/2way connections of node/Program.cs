@@ -238,6 +238,10 @@ namespace AeternumNode
                     return "Transaction Failed!";
                 }
             }
+            else if (x.Contains("%EXPLORERDETAILS%"))
+            {
+                return GetExplorerDetails();
+            }
             else
             {
                 WriteLine(x);
@@ -246,11 +250,28 @@ namespace AeternumNode
 
         }
 
-        //static string GetMiningDetails()
-        //{
+        static string GetExplorerDetails()
+        {
+            string data = "";
 
+            data += $"{blockChain.Count.ToString()}%";
+            data += $"{blockChain.Last().hash}%";
 
-        //}
+            for (int i = 0; i < confirmedTransactions.Count; i++)
+            {
+                Transaction tx = confirmedTransactions[i];
+                data += $"{tx.from},{tx.to},{tx.data},{i},confirmed%";
+            }
+
+            for (int i = 0; i < pendingTransactions.Count; i++)
+            {
+                Transaction tx = pendingTransactions[i];
+                int id = confirmedTransactions.Count + 1;
+                data += $"{tx.from},{tx.to},{tx.data},{id},pending%";
+            }
+
+            return data;
+        }
 
         static bool CreateNewBlock(string x)
         {
