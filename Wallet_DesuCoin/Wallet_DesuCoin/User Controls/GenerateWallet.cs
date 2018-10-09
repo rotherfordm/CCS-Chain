@@ -12,6 +12,8 @@ using Nethereum.Signer;
 using Nethereum.Util;
 using Nethereum.Signer.Crypto;
 using System.Security.Cryptography;
+using System.Threading;
+using System.Net.Sockets;
 
 namespace Wallet_DesuCoin
 {
@@ -19,7 +21,88 @@ namespace Wallet_DesuCoin
     {
         private static GenerateWallet _instance;
         TransactionWallet transWal;
-        
+
+        //private void SendToServer(string _data)
+        //{
+        //    NetworkStream stream = frmMain.server.GetStream();
+
+        //    byte[] sendData = Encoding.ASCII.GetBytes(_data);
+
+        //    if (sendData.Length != 0)
+        //    {
+        //        stream.Write(sendData, 0, sendData.Length);
+        //        //ADDED
+        //        Thread.Sleep(1000);
+        //        if (stream.DataAvailable)
+        //        {
+        //            byte[] dataByte = new byte[frmMain.server.Available];
+
+        //            stream.Read(dataByte, 0, dataByte.Length);
+
+        //            string dataString = Encoding.ASCII.GetString(dataByte);
+        //        }
+        //    }
+        //}
+
+        //private void SendToServerGetBalance(string _data)
+        //{
+        //    NetworkStream stream = frmMain.server.GetStream();
+
+        //    byte[] sendData = Encoding.ASCII.GetBytes($"%GETBALANCE%{_data}");
+
+        //    if (sendData.Length != 0)
+        //    {
+        //        stream.Write(sendData, 0, sendData.Length);
+        //        //ADDED
+        //        Thread.Sleep(1000);
+        //        if (stream.DataAvailable)
+        //        {
+        //            byte[] dataByte = new byte[frmMain.server.Available];
+
+        //            stream.Read(dataByte, 0, dataByte.Length);
+
+        //            string dataString = Encoding.ASCII.GetString(dataByte);
+        //            MainForm.LabelText = dataString;
+        //        }
+        //    }
+        //}
+
+        public frmMain MainForm
+        {
+            get
+            {
+                var parent = Parent;
+                while (parent != null && (parent as frmMain) == null)
+                {
+                    parent = parent.Parent;
+                }
+                return parent as frmMain;
+            }
+        }
+
+        public void SendToServerGetBalance(string _data)
+        {
+            NetworkStream stream = frmMain.server.GetStream();
+
+            byte[] sendData = Encoding.ASCII.GetBytes($"%GETBALANCE%{_data}");
+
+            if (sendData.Length != 0)
+            {
+                stream.Write(sendData, 0, sendData.Length);
+                //ADDED
+                Thread.Sleep(1000);
+                if (stream.DataAvailable)
+                {
+                    byte[] dataByte = new byte[frmMain.server.Available];
+
+                    stream.Read(dataByte, 0, dataByte.Length);
+
+                    string dataString = Encoding.ASCII.GetString(dataByte);
+                    MainForm.LabelText = dataString;
+                }
+            }
+        }
+
         public static GenerateWallet Instance
         {
             get
@@ -29,8 +112,7 @@ namespace Wallet_DesuCoin
                 return _instance;
             }
         }
-
-            
+   
         public GenerateWallet()
         {
             InitializeComponent();
@@ -55,22 +137,34 @@ namespace Wallet_DesuCoin
                 //txtGenWallet.Text = sprivKey.GetPrivateKeyAsBytes().ToHex();
                 txtGenWallet.Text = $"Generated Private Key:\n{sprivKey.GetPrivateKeyAsBytes().ToHex()}\nExtracted Public Key:\n{pubKeyCompressed.ToHex()} \nAddress:\n{pubKeyShaRIPE.ToHex()}";
 
+                string data = $"%NEWWALLET%{pubKeyShaRIPE.ToHex()}";
+
+                frmMain.SendToServer(data);
+
                 TransactionWallet.addressSession = pubKeyShaRIPE.ToHex();
                 TransactionWallet.pubKeySession = pubKeyCompressed.ToHex();
                 TransactionWallet.privKeySession = sprivKey.GetPrivateKeyAsBytes().ToHex();
+                SendToServerGetBalance(pubKeyShaRIPE.ToHex());
+                MainForm.LabelTextAddress = pubKeyShaRIPE.ToHex();
+
+                //((Label)frmMain.Controls["lblAccBalance"]).Text = "test";
                 //transWal.AddLog(sprivKey.GetPrivateKeyAsBytes().ToHex());
             }
-            catch
+            catch(Exception error)
             {
-                txtGenWallet.Text = sprivKey.GetPrivateKeyAsBytes().ToHex();
-            }
-            
+                txtGenWallet.Text = error.ToString();
+            }       
         }
 
         public static byte[] RipeMD160(byte[] dataArray)
         {
             RIPEMD160Managed hashString = new RIPEMD160Managed();
             return hashString.ComputeHash(dataArray);
+        }
+
+        private void GenerateWallet_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

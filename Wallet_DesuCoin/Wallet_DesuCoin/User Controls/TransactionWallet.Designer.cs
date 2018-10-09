@@ -30,7 +30,7 @@
         {
             this.panel2 = new System.Windows.Forms.Panel();
             this.txtTransConfirm = new System.Windows.Forms.RichTextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnSendTransaction = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -49,7 +49,7 @@
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.txtTransConfirm);
-            this.panel2.Controls.Add(this.button1);
+            this.panel2.Controls.Add(this.btnSendTransaction);
             this.panel2.Controls.Add(this.label4);
             this.panel2.Controls.Add(this.textBox1);
             this.panel2.Controls.Add(this.label3);
@@ -65,6 +65,7 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(990, 463);
             this.panel2.TabIndex = 4;
+            this.panel2.MouseEnter += new System.EventHandler(this.panel2_MouseEnter);
             // 
             // txtTransConfirm
             // 
@@ -75,16 +76,18 @@
             this.txtTransConfirm.Size = new System.Drawing.Size(950, 91);
             this.txtTransConfirm.TabIndex = 14;
             this.txtTransConfirm.Text = "";
+            this.txtTransConfirm.Visible = false;
             // 
-            // button1
+            // btnSendTransaction
             // 
-            this.button1.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(586, 317);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(153, 35);
-            this.button1.TabIndex = 13;
-            this.button1.Text = "Send Transaction";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnSendTransaction.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSendTransaction.Location = new System.Drawing.Point(763, 85);
+            this.btnSendTransaction.Name = "btnSendTransaction";
+            this.btnSendTransaction.Size = new System.Drawing.Size(181, 35);
+            this.btnSendTransaction.TabIndex = 13;
+            this.btnSendTransaction.Text = "Send Transaction";
+            this.btnSendTransaction.UseVisualStyleBackColor = true;
+            this.btnSendTransaction.Click += new System.EventHandler(this.btnSendTransaction_Click);
             // 
             // label4
             // 
@@ -95,6 +98,7 @@
             this.label4.Size = new System.Drawing.Size(202, 29);
             this.label4.TabIndex = 12;
             this.label4.Text = "Block Chain Node:";
+            this.label4.Visible = false;
             // 
             // textBox1
             // 
@@ -102,6 +106,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(338, 22);
             this.textBox1.TabIndex = 11;
+            this.textBox1.Visible = false;
             // 
             // label3
             // 
@@ -139,7 +144,6 @@
             this.txtTransRecip.Name = "txtTransRecip";
             this.txtTransRecip.Size = new System.Drawing.Size(582, 22);
             this.txtTransRecip.TabIndex = 7;
-            this.txtTransRecip.Text = "3456787654345678";
             // 
             // txtTransValue
             // 
@@ -147,7 +151,6 @@
             this.txtTransValue.Name = "txtTransValue";
             this.txtTransValue.Size = new System.Drawing.Size(582, 22);
             this.txtTransValue.TabIndex = 6;
-            this.txtTransValue.Text = "678";
             // 
             // txtTransSender
             // 
@@ -166,6 +169,7 @@
             this.txtTransData.Size = new System.Drawing.Size(950, 154);
             this.txtTransData.TabIndex = 4;
             this.txtTransData.Text = "";
+            this.txtTransData.Visible = false;
             // 
             // btnSignTransact
             // 
@@ -176,6 +180,7 @@
             this.btnSignTransact.TabIndex = 2;
             this.btnSignTransact.Text = "Sign Transaction";
             this.btnSignTransact.UseVisualStyleBackColor = true;
+            this.btnSignTransact.Visible = false;
             this.btnSignTransact.Click += new System.EventHandler(this.btnSignTransact_Click);
             // 
             // label6
@@ -214,7 +219,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox txtTransConfirm;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnSendTransaction;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBox1;
         public System.Windows.Forms.TextBox txtTransSender;

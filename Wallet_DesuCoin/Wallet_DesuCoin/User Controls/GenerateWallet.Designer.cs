@@ -96,6 +96,7 @@
             this.Controls.Add(this.panel2);
             this.Name = "GenerateWallet";
             this.Size = new System.Drawing.Size(997, 477);
+            this.Load += new System.EventHandler(this.GenerateWallet_Load);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.ResumeLayout(false);

@@ -39,8 +39,7 @@ namespace Aeternum_Faucet
         {
             string data = "%NEWWALLET%faucetWallet";
 
-            SendToServer(data);
-            
+            SendToServer(data);  
         }
 
         private void btnGiveAeternum_Click(object sender, EventArgs e)

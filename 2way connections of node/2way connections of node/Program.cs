@@ -191,7 +191,6 @@ namespace AeternumNode
 
         static string ProcessData(string x, TcpClient _client)
         {
-
             if (x.Contains("%NODEDATA%"))
             {
                 ReciprocateConnection(x);
@@ -217,7 +216,6 @@ namespace AeternumNode
                 WriteLine($"{AppendTime()}A Job was given to Miner!");
 
                 return $"{blockChain.Count()},{blockChain.Last().hash},{GetHash(pendingTransactions)}";
-
             }
             else if (x.Contains("%SENDMINEDBLOCK%"))
             {

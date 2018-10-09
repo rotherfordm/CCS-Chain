@@ -13,6 +13,8 @@ using Nethereum.Signer;
 using Nethereum.Util;
 using Nethereum.Signer.Crypto;
 using System.Security.Cryptography;
+using System.Threading;
+using System.Net.Sockets;
 
 namespace Wallet_DesuCoin
 {
@@ -24,7 +26,60 @@ namespace Wallet_DesuCoin
         public static string addressSession;
         public static string pubKeySession;
 
+        TransactionWallet transWal;
+
+        public frmMain MainForm
+        {
+            get
+            {
+                var parent = Parent;
+                while (parent != null && (parent as frmMain) == null)
+                {
+                    parent = parent.Parent;
+                }
+                return parent as frmMain;
+            }
+        }
+
+        private void SendToServerGetBalance(string _data)
+        {
+            NetworkStream stream = frmMain.server.GetStream();
+
+            byte[] sendData = Encoding.ASCII.GetBytes($"%GETBALANCE%{_data}");
+
+            if (sendData.Length != 0)
+            {
+                stream.Write(sendData, 0, sendData.Length);
+                //ADDED
+                Thread.Sleep(1000);
+                if (stream.DataAvailable)
+                {
+                    byte[] dataByte = new byte[frmMain.server.Available];
+
+                    stream.Read(dataByte, 0, dataByte.Length);
+
+                    string dataString = Encoding.ASCII.GetString(dataByte);
+                    MainForm.LabelText = dataString;
+                }
+            }
+        }
+
+
         string Sender, Receiver, value, fee, dateCreated, data, senderPubKey, transactionDataHash, senderSignature, minedInBlockIndex, TransferSuccess, JsonTrans;
+
+        private void panel2_MouseEnter(object sender, EventArgs e)
+        {
+            txtTransSender.Text = MainForm.LabelTextAddress;
+        }
+
+        private void btnSendTransaction_Click(object sender, EventArgs e)
+        { 
+            string data = $"%SENDCOINS%{txtTransSender.Text},{txtTransRecip.Text},{txtTransValue.Text}";
+
+            frmMain.SendToServer(data);
+            SendToServerGetBalance(txtTransSender.Text);
+            MessageBox.Show("Transaction Now Pending!");
+        }
 
         public static TransactionWallet Instance
         {
@@ -78,7 +133,7 @@ namespace Wallet_DesuCoin
 
         private void TransactionWallet_Load(object sender, EventArgs e)
         {
-            txtTransSender.Text = addressSession;
+            txtTransSender.Text = MainForm.LabelTextAddress;
         }
 
         static string sha256(string randomString)

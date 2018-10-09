@@ -14,6 +14,9 @@ using Nethereum.Util;
 using Nethereum.Signer.Crypto;
 using System.Numerics;
 using System.Globalization;
+using Wallet_DesuCoin;
+using System.Threading;
+using System.Net.Sockets;
 
 namespace Wallet_DesuCoin
 {
@@ -21,6 +24,42 @@ namespace Wallet_DesuCoin
     {
         private static OpenWallet _instance;
         TransactionWallet transWal;
+
+        private void SendToServerGetBalance(string _data)
+        {
+            NetworkStream stream = frmMain.server.GetStream();
+
+            byte[] sendData = Encoding.ASCII.GetBytes($"%GETBALANCE%{_data}");
+
+            if (sendData.Length != 0)
+            {
+                stream.Write(sendData, 0, sendData.Length);
+                //ADDED
+                Thread.Sleep(1000);
+                if (stream.DataAvailable)
+                {
+                    byte[] dataByte = new byte[frmMain.server.Available];
+
+                    stream.Read(dataByte, 0, dataByte.Length);
+
+                    string dataString = Encoding.ASCII.GetString(dataByte);
+                    MainForm.LabelText = dataString;
+                }
+            }
+        }
+
+        public frmMain MainForm
+        {
+            get
+            {
+                var parent = Parent;
+                while (parent != null && (parent as frmMain) == null)
+                {
+                    parent = parent.Parent;
+                }
+                return parent as frmMain;
+            }
+        }
 
         public static OpenWallet Instance
         {
@@ -59,11 +98,12 @@ namespace Wallet_DesuCoin
                 txtOpenWallet.Text = $"Private Key:\n{txtOpenWalletPK.Text}\nExtracted Public Key:\n{pubKeyCompressed.ToHex()} \nAddress:\n{pubKeyShaRIPE.ToHex()}";
                 TransactionWallet.addressSession = pubKeyShaRIPE.ToHex();
                 TransactionWallet.pubKeySession = pubKeyCompressed.ToHex();
+                MainForm.LabelTextAddress = pubKeyShaRIPE.ToHex();
+                SendToServerGetBalance(pubKeyShaRIPE.ToHex());
             }
             catch (Exception fuku)
             {
-                txtOpenWallet.Text = fuku.ToString();
-                
+                txtOpenWallet.Text = fuku.ToString(); 
             }
            
         }
