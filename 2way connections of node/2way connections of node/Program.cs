@@ -10,14 +10,16 @@ using static System.Console;
 using System.Threading;
 using Newtonsoft.Json;
 using System.IO;
-using AeternumNode;
 
 namespace AeternumNode
 {
     class Program
     {
         // Blockchain
-        List<Block> blockChain = new List<Block>();
+        static List<Block> blockChain = new List<Block>();
+
+        // Wallets
+        static Dictionary<string, int> wallets = new Dictionary<string, int>();
 
         // Variables
         public static string serverIpAddress = "";
@@ -167,62 +169,20 @@ namespace AeternumNode
             }
         }
 
-        //static void AcceptDataFromClient()
-        //{
-        //    while (true)
-        //    {
-        //        if (listClients.Count != 0)
-        //        {
-        //            for (int i = 0; i < listClients.Count; i++)
-        //            {
-        //                try
-        //                {
-        //                    TcpClient client = listClients[i];
-
-        //                    NetworkStream stream = client.GetStream();
-
-        //                    if (stream.DataAvailable)
-        //                    {
-        //                        byte[] dataByte = new byte[client.Available];
-
-        //                        stream.Read(dataByte, 0, dataByte.Length);
-
-
-        //                        //Sending automatic reply=====================
-        //                        //string replystring = "Transaction Completed";
-        //                        //byte[] reply = new byte[replystring.Length];
-
-        //                        //reply = Encoding.ASCII.GetBytes(replystring);
-        //                        //stream.Write(reply, 0, reply.Length);
-        //                        //========================
-
-        //                        string dataString = Encoding.ASCII.GetString(dataByte);
-        //                        ProcessData(dataString);
-                                
-
-        //                        WriteLine(dataString);
-
-        //                        //WriteLine(StripHeaderFromData(dataString));
-        //                        //SampleSend(/*ProcessReceivedData(*/dataString/*)*/);
-
-        //                        //ProcessTransaction(StripHeaderFromData(dataString));
-
-        //                    }
-        //                }
-        //                catch { }
-
-
-        //            }
-        //        }
-        //    }
-        //}
-
         static void ProcessData(string x)
         {
 
             if (x.Contains("%NODEDATA%"))
             {
                 ReciprocateConnection(x);
+            }
+            else if (x.Contains("%NEWWALLET%"))
+            {
+                NewWalletCreated(x);
+            }
+            else if (x.Contains("%GETBALANCE%"))
+            {
+
             }
             else
             {
@@ -256,59 +216,19 @@ namespace AeternumNode
 
         }
 
-        //static string ParseDataToJsonString(string x)
-        //{
-        //    string[] raw = x.Split();
-        //    string input = "";
-        //    bool checker = false;
+        static void NewWalletCreated(string _wallet)
+        {
+            _wallet = _wallet.Replace("%NEWWALLET%", "");
 
-        //    if (x.Contains('['))
-        //    {
-        //        // Reserverd for Json array
-        //    }
-        //    else if (x.Contains('%'))
-        //    {
-        //        foreach (string ch in raw)
-        //        {
-        //            if (ch == "%")
-        //                checker = true;
-        //            else if (ch == "}")
-        //            {
-        //                input += ch;
-        //                checker = false;
-        //            }
+            wallets.Add(_wallet, 10);
+        }
 
-        //            if (checker)
-        //                input += ch;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        foreach (string ch in raw)
-        //        {
-        //            if (ch == "{")
-        //                checker = true;
-        //            else if (ch == "}")
-        //            {
-        //                input += ch;
-        //                checker = false;
-        //            }
+        static int GetWalletBalance(string _wallet)
+        {
+            _wallet = _wallet.Replace("%GETBALANCE%", "");
 
-        //            if (checker)
-        //                input += ch;
-        //        }
-        //    }
-
-        //    return input;
-        //}
-
-        //static void ProcessTransaction(string x)
-        //{
-        //    Transaction jsonDeserialized = JsonConvert.DeserializeObject<Transaction>(x);
-
-        //    WriteLine(jsonDeserialized.data);
-            
-        //}
+            return wallets[_wallet];
+        }
 
         static void SendDataToServers()
         {
