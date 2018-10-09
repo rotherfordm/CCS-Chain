@@ -10,6 +10,7 @@ using static System.Console;
 using System.Threading;
 using Newtonsoft.Json;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace AeternumNode
 {
@@ -20,6 +21,9 @@ namespace AeternumNode
 
         // Wallets
         static Dictionary<string, int> wallets = new Dictionary<string, int>();
+
+        // Pending Transactions List
+        static List<Transaction> pendingTransactions = new List<Transaction>();
 
         // Variables
         public static string serverIpAddress = "";
@@ -39,6 +43,7 @@ namespace AeternumNode
 
         static void Main(string[] args)
         {
+            PopulateBlockChain();
             // Start Server
             ServerStart();
             
@@ -54,6 +59,12 @@ namespace AeternumNode
 
             FirstConnection();
 
+        }
+
+        static void PopulateBlockChain()
+        {
+            Block _block = new Block();
+            blockChain.Add(_block.getGenesisBlock());
         }
 
         static void SendData(string x, TcpClient client)
@@ -164,32 +175,139 @@ namespace AeternumNode
                     stream.Read(dataByte, 0, dataByte.Length);
 
                     string dataString = Encoding.ASCII.GetString(dataByte);
-                    ProcessData(dataString);
+
+                    // Data
+                    string _result = ProcessData(dataString, _client);
+
+                    if (_result !=  "NAN")
+                    {
+                        byte[] sendData = Encoding.ASCII.GetBytes(_result);
+                        stream.Write(sendData, 0, sendData.Length);
+                    }
                 }
             }
         }
 
-        static void ProcessData(string x)
+        static string ProcessData(string x, TcpClient _client)
         {
 
             if (x.Contains("%NODEDATA%"))
             {
                 ReciprocateConnection(x);
+                return "NAN";
             }
             else if (x.Contains("%NEWWALLET%"))
             {
                 NewWalletCreated(x);
+                return "Successfully Created a New Wallet!";
             }
             else if (x.Contains("%GETBALANCE%"))
             {
+                string balance = GetWalletBalance(x).ToString();
+                return balance;
+            }
+            else if (x.Contains("%GETMININGJOB%"))
+            {
+                WriteLine($"{AppendTime()}Miner Requested a Job!");
 
+                WriteLine($"{AppendTime()}A Job was given to Miner!");
+
+                return $"{blockChain.Count()},{blockChain.Last().hash},{GetHash(pendingTransactions)}";
+
+            }
+            else if (x.Contains("%SENDMINEDBLOCK%"))
+            {
+                if (CreateNewBlock(x))
+                {
+                    WriteLine($"{AppendTime()}New Block was found!");
+                    return "Sucessfully Created a new block!";
+                }
+                else
+                    return "New Block Creation Failed!";
+            }
+            else if (x.Contains("%SENDCOINS%"))
+            {
+                if (SendCoins(x))
+                {
+                    return "Transaction Pending!";
+                }
+                else
+                {
+                    return "Transaction Failed!";
+                }
             }
             else
             {
                 WriteLine(x);
+                return "NAN";
             }
 
+        }
 
+        //static string GetMiningDetails()
+        //{
+
+
+        //}
+
+        static bool CreateNewBlock(string x)
+        {
+            try
+            {
+                string[] details = x.Replace("%SENDMINEDBLOCK%", "").Split(',');
+                int _index = blockChain.Count();
+                string _prevhash = blockChain.Last().hash;
+                long _timeStamp = long.Parse(details[0]);
+                List<Transaction> _data = pendingTransactions;
+                string _newhash = details[1];
+                int _diifficulty = int.Parse(details[2]);
+                int _nonce = int.Parse(details[3]);
+
+                Block newBlock = new Block(_index, _prevhash, _timeStamp, _data, _newhash, _diifficulty, _nonce);
+
+                blockChain.Add(newBlock);
+
+                ExecutePendingTransactions();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
+
+        static void ExecutePendingTransactions()
+        {
+            foreach (Transaction tx in pendingTransactions)
+            {
+                SendConfirmedCoins(tx.from, tx.to, int.Parse(tx.data));
+            }
+
+            pendingTransactions.Clear();
+        }
+
+
+        static string GetHash(List<Transaction> _pending)
+        {
+            using (SHA256 _hash = SHA256.Create())
+            {
+                string value = "";
+                foreach (Transaction x in _pending)
+                {
+                    value += x.from + x.to + x.fee + x.dateCreated;
+                }
+                byte[] bytes = _hash.ComputeHash(Encoding.UTF8.GetBytes(value));
+
+                StringBuilder str = new StringBuilder();
+                foreach (byte x in bytes)
+                {
+                    str.Append(x.ToString("x2"));
+                }
+
+                return str.ToString();
+            }
         }
 
         static string AppendTime()
@@ -221,13 +339,55 @@ namespace AeternumNode
             _wallet = _wallet.Replace("%NEWWALLET%", "");
 
             wallets.Add(_wallet, 10);
+            WriteLine($"{AppendTime()}New Wallet Created..");
         }
 
-        static int GetWalletBalance(string _wallet)
+        static string GetWalletBalance(string _wallet)
         {
             _wallet = _wallet.Replace("%GETBALANCE%", "");
 
-            return wallets[_wallet];
+            if (wallets.ContainsKey(_wallet))
+                return wallets[_wallet].ToString();
+            else
+                return "Wallet Doesn't Exist!!";
+        }
+
+        static bool SendCoins(string x)
+        {
+            try
+            {
+                string[] details = x.Replace("%SENDCOINS%", "").Split(',');
+
+                string _sender = details[0];
+                string _recvr = details[1];
+                string _amount = details[2];
+
+                if (wallets.ContainsKey(_sender) && wallets.ContainsKey(_recvr) && wallets[_sender] >= int.Parse(_amount))
+                {
+
+                    Transaction tx = new Transaction();
+                    tx.from = _sender;
+                    tx.to = _recvr;
+                    tx.data = _amount;
+
+                    pendingTransactions.Add(tx);
+
+                    return true;
+                }
+                else
+                    return false;
+            }
+            catch
+            {
+                return false;
+            }
+            
+        }
+
+        static void SendConfirmedCoins(string _sender, string _recvr, int _amount)
+        {
+            wallets[_sender] -= _amount;
+            wallets[_recvr] += _amount;
         }
 
         static void SendDataToServers()
@@ -238,14 +398,31 @@ namespace AeternumNode
 
                 foreach (TcpClient client in listServers)
                 {
+                    // Start a network stream
+                    NetworkStream stream = client.GetStream();
+
                     byte[] sendData = Encoding.ASCII.GetBytes(data);
 
                     if (sendData.Length != 0)
-                    {
-                        // Start a network stream
-                        NetworkStream stream = client.GetStream();
+                    {                  
                         stream.Write(sendData, 0, sendData.Length);
+
+                        //ADDED
+                        Thread.Sleep(1000);
+                        if (stream.DataAvailable)
+                        {
+                            byte[] dataByte = new byte[client.Available];
+
+                            stream.Read(dataByte, 0, dataByte.Length);
+
+                            string dataString = Encoding.ASCII.GetString(dataByte);
+
+                            WriteLine(dataString);
+                        }
+
+
                     }
+
                 }
             }
         }
@@ -269,7 +446,7 @@ namespace AeternumNode
                             }
                             catch
                             {
-                                Console.WriteLine("{0} disconnected!", client.Client.RemoteEndPoint);
+                                Console.WriteLine($"{AppendTime()}{0} disconnected!", client.Client.RemoteEndPoint);
                                 listClients.Remove(client);
                             }
                         }
