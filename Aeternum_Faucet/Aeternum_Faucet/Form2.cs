@@ -12,24 +12,19 @@ namespace Aeternum_Faucet
 {
     public partial class Form2 : Form
     {
+        public static string serverIpAdress;
+        public static string serverPort;
+
         public Form2()
         {
             InitializeComponent();
         }
 
-        public string Ip()
+        private void btnInitialize_Click(object sender, EventArgs e)
         {
-            return txtIp.Text;
-        }
 
-        public int Port()
-        {
-            return int.Parse(txtPort.Text);
-        }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Form1 form1 = new Form1(txtIp.Text, int.Parse(txtPort.Text));
+            Form1 form1 = new Form1();
             form1.Show();
             this.Hide();
         }

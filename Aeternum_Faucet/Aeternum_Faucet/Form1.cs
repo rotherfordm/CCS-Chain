@@ -12,37 +12,68 @@ using System.Drawing.Imaging;
 using System.Threading;
 using System.Net.Sockets;
 
+
 namespace Aeternum_Faucet
 {
     public partial class Form1 : Form
     {
+        TcpClient server;
+
         public Form1()
         {
             InitializeComponent();
         }
 
-        TcpClient client;
-        NetworkStream stream;
-
-        string ip;
-        int port;
-
         private void Form1_Load(object sender, EventArgs e)
         {
+            ConnectToNode();
+            Generatewallet();
+        }
+
+        private void ConnectToNode()
+        {
+            server = new TcpClient("127.0.0.1", 3000);
+        }
+
+        private void Generatewallet()
+        {
+            string data = "%NEWWALLET%faucetWallet";
+
+            SendToServer(data);
             
         }
 
-        public Form1(string ip, int port)
+        private void btnGiveAeternum_Click(object sender, EventArgs e)
         {
-            this.ip = ip;
-            this.port = port;
+            string data = $"%SENDCOINS%faucetWallet,{txtAddress.Text},1";
 
-            InitializeComponent();
+            SendToServer(data);
+        }
 
-            Form2 form2 = new Form2();
+        private void SendToServer(string _data)
+        {
+            NetworkStream stream = server.GetStream();
 
-            client = new TcpClient(ip, port);
-            stream = client.GetStream();
+            byte[] sendData = Encoding.ASCII.GetBytes(_data);
+
+            if (sendData.Length != 0)
+            {
+                stream.Write(sendData, 0, sendData.Length);
+
+                //ADDED
+                Thread.Sleep(1000);
+                if (stream.DataAvailable)
+                {
+                    byte[] dataByte = new byte[server.Available];
+
+                    stream.Read(dataByte, 0, dataByte.Length);
+
+                    string dataString = Encoding.ASCII.GetString(dataByte);
+
+                    lblResponse.Text = dataString;
+                }
+
+            }
         }
     }
 }

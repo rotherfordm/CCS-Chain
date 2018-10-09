@@ -22,8 +22,9 @@ namespace AeternumNode
         // Wallets
         static Dictionary<string, int> wallets = new Dictionary<string, int>();
 
-        // Pending Transactions List
+        // Pending and Confirmed Transaction List
         static List<Transaction> pendingTransactions = new List<Transaction>();
+        static List<Transaction> confirmedTransactions = new List<Transaction>();
 
         // Variables
         public static string serverIpAddress = "";
@@ -283,6 +284,7 @@ namespace AeternumNode
             foreach (Transaction tx in pendingTransactions)
             {
                 SendConfirmedCoins(tx.from, tx.to, int.Parse(tx.data));
+                confirmedTransactions.Add(tx);
             }
 
             pendingTransactions.Clear();
