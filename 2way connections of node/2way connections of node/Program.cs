@@ -42,6 +42,9 @@ namespace AeternumNode
         // List of Threads;
         static List<Thread> clientThreads = new List<Thread>();
 
+        // Variable for Broadcasting
+        static string messageToBroadcast = "";
+
         static void Main(string[] args)
         {
             PopulateBlockChain();
@@ -491,17 +494,17 @@ namespace AeternumNode
                     stream.Write(sendData, 0, sendData.Length);
 
                     //ADDED
-                    Thread.Sleep(1000);
-                    if (stream.DataAvailable)
-                    {
-                        byte[] dataByte = new byte[client.Available];
+                    //Thread.Sleep(1000);
+                    //if (stream.DataAvailable)
+                    //{
+                    //    byte[] dataByte = new byte[client.Available];
 
-                        stream.Read(dataByte, 0, dataByte.Length);
+                    //    stream.Read(dataByte, 0, dataByte.Length);
 
-                        string dataString = Encoding.ASCII.GetString(dataByte);
+                    //    string dataString = Encoding.ASCII.GetString(dataByte);
 
-                        WriteLine(dataString);
-                    }
+                    //    WriteLine(dataString);
+                    //}
 
                 }
 
