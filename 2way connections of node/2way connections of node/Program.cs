@@ -171,7 +171,7 @@ namespace AeternumNode
             NetworkStream stream = _client.GetStream();
 
             while (true)
-            {
+            {           
                 if (stream.DataAvailable)
                 {
                     byte[] dataByte = new byte[_client.Available];
@@ -180,20 +180,33 @@ namespace AeternumNode
 
                     string dataString = Encoding.ASCII.GetString(dataByte);
 
-                    // Data
-                    string _result = ProcessData(dataString, _client);
-
-                    
-                    // BroadCast
+                    // Broadcast ==============================
                     if (!dataString.Contains("%NODEDATA%"))
-                        BroadCastToOtherNodes(dataString);
-
-                    if (_result !=  "NAN")
                     {
-                        byte[] sendData = Encoding.ASCII.GetBytes(_result);
-                        stream.Write(sendData, 0, sendData.Length);
+                        if (messageToBroadcast != dataString)
+                        {
+                            BroadCastToOtherNodes(dataString);
+                        }
+
+                    }
+                    //==========================================
+
+                    // Data
+                    if (messageToBroadcast != dataString)
+                    {
+                        messageToBroadcast = dataString;
+
+                        string _result = ProcessData(dataString, _client);
+
+                        if (_result != "NAN")
+                        {
+                            byte[] sendData = Encoding.ASCII.GetBytes(_result);
+                            stream.Write(sendData, 0, sendData.Length);
+                        }
+
                     }
                 }
+
             }
         }
 
@@ -388,8 +401,11 @@ namespace AeternumNode
         {
             _wallet = _wallet.Replace("%NEWWALLET%", "");
 
-            wallets.Add(_wallet, 10);
-            WriteLine($"{AppendTime()}New Wallet Created..");
+            if (!wallets.ContainsKey(_wallet))
+            {
+                wallets.Add(_wallet, 10);
+                WriteLine($"{AppendTime()}New Wallet Created..");
+            }
         }
 
         static string GetWalletBalance(string _wallet)
@@ -478,28 +494,24 @@ namespace AeternumNode
 
         static void BroadCastToOtherNodes(string data)
         {
-            //while (true)
-            //{
-            //string data = ReadLine();
-
             foreach (TcpClient client in listServers)
             {
                 // Start a network stream
-                NetworkStream stream = client.GetStream();
+                NetworkStream _stream = client.GetStream();
 
                 byte[] sendData = Encoding.ASCII.GetBytes(data);
 
                 if (sendData.Length != 0)
                 {
-                    stream.Write(sendData, 0, sendData.Length);
+                    _stream.Write(sendData, 0, sendData.Length);
 
                     //ADDED
                     //Thread.Sleep(1000);
-                    //if (stream.DataAvailable)
+                    //if (_stream.DataAvailable)
                     //{
                     //    byte[] dataByte = new byte[client.Available];
 
-                    //    stream.Read(dataByte, 0, dataByte.Length);
+                    //    _stream.Read(dataByte, 0, dataByte.Length);
 
                     //    string dataString = Encoding.ASCII.GetString(dataByte);
 
@@ -509,7 +521,6 @@ namespace AeternumNode
                 }
 
             }
-            //}
         }
 
         private static void ProcessSync(string _data)

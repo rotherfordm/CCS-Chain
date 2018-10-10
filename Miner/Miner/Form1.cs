@@ -212,14 +212,14 @@ namespace Miner
                 nextHash = CalculateHash(nextIndex.ToString(), previousBlock.Hash, nextTimestamp.ToString(), data, nonce);
             }
 
-            MessageBox.Show("sss");
+            MessageBox.Show("Mining Complete");
             string data_toNode = $"%GETMININGJOB%";
             SendToServerString(data_toNode);
-            string[] details = SendToServerString(data_toNode).Split(',');
+            //string[] details = SendToServerString(data_toNode).Split(',');
             
-            string _nextIndex = details[0];
-            string _lastHash = details[1];
-            string _dataHash = details[2];
+            ////string _nextIndex = details[0];
+            ////string _lastHash = details[1];
+            ////string _dataHash = details[2];
             
             //MessageBox.Show($"next Index: {_nextIndex}\n last hash: {_lastHash}\n data hash: {_dataHash}");
             
