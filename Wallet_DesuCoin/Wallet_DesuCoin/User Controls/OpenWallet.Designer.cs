@@ -55,7 +55,7 @@
             this.txtOpenWalletPK.Location = new System.Drawing.Point(22, 106);
             this.txtOpenWalletPK.Multiline = true;
             this.txtOpenWalletPK.Name = "txtOpenWalletPK";
-            this.txtOpenWalletPK.Size = new System.Drawing.Size(511, 31);
+            this.txtOpenWalletPK.Size = new System.Drawing.Size(578, 31);
             this.txtOpenWalletPK.TabIndex = 5;
             // 
             // txtOpenWallet
@@ -71,7 +71,7 @@
             // btnOpenWallet
             // 
             this.btnOpenWallet.Font = new System.Drawing.Font("Bahnschrift SemiCondensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOpenWallet.Location = new System.Drawing.Point(539, 106);
+            this.btnOpenWallet.Location = new System.Drawing.Point(606, 106);
             this.btnOpenWallet.Name = "btnOpenWallet";
             this.btnOpenWallet.Size = new System.Drawing.Size(143, 31);
             this.btnOpenWallet.TabIndex = 2;

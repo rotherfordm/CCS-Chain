@@ -44,7 +44,7 @@
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(101, 89);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(200, 22);
             this.textBox1.TabIndex = 0;
@@ -52,7 +52,7 @@
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(353, 87);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(107, 26);
             this.button1.TabIndex = 1;
@@ -83,12 +83,13 @@
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(57, 126);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(4);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBox2.Size = new System.Drawing.Size(708, 363);
             this.textBox2.TabIndex = 5;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // label3
             // 
@@ -108,7 +109,7 @@
             // tb_IP
             // 
             this.tb_IP.Location = new System.Drawing.Point(101, 15);
-            this.tb_IP.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_IP.Margin = new System.Windows.Forms.Padding(4);
             this.tb_IP.Name = "tb_IP";
             this.tb_IP.Size = new System.Drawing.Size(200, 22);
             this.tb_IP.TabIndex = 8;
@@ -116,7 +117,7 @@
             // tb_Port
             // 
             this.tb_Port.Location = new System.Drawing.Point(101, 52);
-            this.tb_Port.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_Port.Margin = new System.Windows.Forms.Padding(4);
             this.tb_Port.Name = "tb_Port";
             this.tb_Port.Size = new System.Drawing.Size(200, 22);
             this.tb_Port.TabIndex = 9;
@@ -156,7 +157,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
