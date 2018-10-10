@@ -183,10 +183,10 @@ namespace AeternumNode
                     // Data
                     string _result = ProcessData(dataString, _client);
 
+                    
                     // BroadCast
-
-                    //if (!dataString.Contains("%NODEDATA%"))
-                    //    BroadCastToOtherNodes(dataString);
+                    if (!dataString.Contains("%NODEDATA%"))
+                        BroadCastToOtherNodes(dataString);
 
                     if (_result !=  "NAN")
                     {
@@ -449,21 +449,21 @@ namespace AeternumNode
                 foreach (TcpClient client in listServers)
                 {
                     // Start a network stream
-                    NetworkStream stream = client.GetStream();
+                    NetworkStream _stream = client.GetStream();
 
                     byte[] sendData = Encoding.ASCII.GetBytes(data);
 
                     if (sendData.Length != 0)
-                    {                  
-                        stream.Write(sendData, 0, sendData.Length);
+                    {
+                        _stream.Write(sendData, 0, sendData.Length);
 
                         //ADDED
                         Thread.Sleep(1000);
-                        if (stream.DataAvailable)
+                        if (_stream.DataAvailable)
                         {
                             byte[] dataByte = new byte[client.Available];
 
-                            stream.Read(dataByte, 0, dataByte.Length);
+                            _stream.Read(dataByte, 0, dataByte.Length);
 
                             string dataString = Encoding.ASCII.GetString(dataByte);
 
