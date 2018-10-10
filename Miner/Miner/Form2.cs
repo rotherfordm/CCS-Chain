@@ -26,14 +26,14 @@ namespace Miner
             this.Hide();
         }
 
-        public string Ip()
-        {
-            return textBox1.Text;
-        }
+        //public string Ip()
+        //{
+        //    return textBox1.Text;
+        //}
 
-        public int Port()
-        {
-            return int.Parse(textBox2.Text);
-        }
+        //public int Port()
+        //{
+        //    return int.Parse(textBox2.Text);
+        //}
     }
 }

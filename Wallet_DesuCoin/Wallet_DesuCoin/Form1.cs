@@ -12,8 +12,8 @@ using Nethereum.Signer;
 using Nethereum.Util;
 using Nethereum.Signer.Crypto;
 using System.Security.Cryptography;
-    using System.Threading;
-    using System.Net.Sockets;
+using System.Threading;
+using System.Net.Sockets;
 
 namespace Wallet_DesuCoin
 {

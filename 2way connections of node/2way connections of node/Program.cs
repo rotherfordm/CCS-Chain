@@ -182,8 +182,8 @@ namespace AeternumNode
 
                     // BroadCast
 
-                    if (!dataString.Contains("%NODEDATA%"))
-                        BroadCastToOtherNodes(dataString);
+                    //if (!dataString.Contains("%NODEDATA%"))
+                    //    BroadCastToOtherNodes(dataString);
 
                     if (_result !=  "NAN")
                     {

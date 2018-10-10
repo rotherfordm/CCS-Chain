@@ -16,6 +16,60 @@ namespace Miner
 {
     public partial class Form1 : Form
     {
+        public static TcpClient server;
+
+        private void ConnectToNode()
+        {
+            server = new TcpClient("127.0.0.1", 3000);
+        }
+
+        public static string SendToServerString(string _data)
+        {
+            NetworkStream stream = server.GetStream();
+
+            byte[] sendData = Encoding.ASCII.GetBytes(_data);
+
+            if (sendData.Length != 0)
+            {
+                stream.Write(sendData, 0, sendData.Length);
+                //ADDED
+                Thread.Sleep(1000);
+                if (stream.DataAvailable)
+                {
+                    byte[] dataByte = new byte[server.Available];
+
+                    stream.Read(dataByte, 0, dataByte.Length);
+
+                    string dataString = Encoding.ASCII.GetString(dataByte);
+
+                    return dataString;
+                }
+            }
+            return "Error Occured";
+        }
+
+        public static void SendToServer(string _data)
+        {
+            NetworkStream stream = server.GetStream();
+
+            byte[] sendData = Encoding.ASCII.GetBytes(_data);
+
+            if (sendData.Length != 0)
+            {
+                stream.Write(sendData, 0, sendData.Length);
+                //ADDED
+                Thread.Sleep(1000);
+                if (stream.DataAvailable)
+                {
+                    byte[] dataByte = new byte[server.Available];
+
+                    stream.Read(dataByte, 0, dataByte.Length);
+
+                    string dataString = Encoding.ASCII.GetString(dataByte);
+                }
+            }
+        }
+
         public class Block
         {
             public int Index { get; set; }
@@ -52,12 +106,12 @@ namespace Miner
             GetGenesisBlock();
 
             blocks.Add(GetGenesisBlock());
-            textBox2.Text = JsonConvert.SerializeObject(blocks, Formatting.Indented);
+            //textBox2.Text = JsonConvert.SerializeObject(blocks, Formatting.Indented);
 
             Form2 form2 = new Form2();
 
-            client = new TcpClient(form2.Ip(), form2.Port());
-            stream = client.GetStream();
+            //client = new TcpClient(form2.Ip(), form2.Port());
+            //stream = client.GetStream();
         }
 
         public Form1(string ip, int port)
@@ -66,20 +120,21 @@ namespace Miner
             this.port = port;
 
             InitializeComponent();
-            GetGenesisBlock();
+            //GetGenesisBlock();
 
-            blocks.Add(GetGenesisBlock());
-            textBox2.Text = JsonConvert.SerializeObject(blocks, Formatting.Indented);
+            //blocks.Add(GetGenesisBlock());
+
+            //textBox2.Text = JsonConvert.SerializeObject(blocks, Formatting.Indented);
 
             Form2 form2 = new Form2();
 
-            client = new TcpClient(ip, port);
-            stream = client.GetStream();
+            //client = new TcpClient(ip, port);
+            //stream = client.GetStream();
         }
 
         public Block GetGenesisBlock()
         {
-            return new Block(0, "0", 1465154705, "my genesis block!!", "816534932c2b7154836da6afc367695e6337db8a921823784c14378abed4f7d7", 0, 0);
+            return new Block(0, "0000000000000000000000000000000000000000000000000000000000000000", DateTimeOffset.UtcNow.ToUnixTimeSeconds(), null, "2BFB4518733A85B42F684872D69C8623EB8EC5624B5291FA6F5F543B918921AE", 0, 0);
         }
 
         private Block LastBlock()
@@ -146,17 +201,28 @@ namespace Miner
             Block previousBlock = LastBlock();
             int nextIndex = previousBlock.Index + 1;
             int nonce = 0;
-            long nextTimestamp = DateTime.Now.Ticks / 1000;
+            long nextTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             string nextHash = CalculateHash(nextIndex.ToString(), previousBlock.Hash, nextTimestamp.ToString(), data.ToString(), nonce);
 
             string zeros = new string('0', difficulty);
             while (nextHash.Substring(0, difficulty) != zeros)
             {
                 nonce++;
-                nextTimestamp = DateTime.Now.Ticks / 1000;
+                nextTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 nextHash = CalculateHash(nextIndex.ToString(), previousBlock.Hash, nextTimestamp.ToString(), data, nonce);
             }
 
+            MessageBox.Show("sss");
+            string data_toNode = $"%GETMININGJOB%";
+            SendToServerString(data_toNode);
+            string[] details = SendToServerString(data_toNode).Split(',');
+            
+            string _nextIndex = details[0];
+            string _lastHash = details[1];
+            string _dataHash = details[2];
+            
+            //MessageBox.Show($"next Index: {_nextIndex}\n last hash: {_lastHash}\n data hash: {_dataHash}");
+            
             return new Block(nextIndex, previousBlock.Hash, nextTimestamp, data, nextHash, difficulty, nonce);
         }
 
@@ -187,13 +253,19 @@ namespace Miner
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             var reversedBlocks = blocks.OrderBy(x => x.Index).Reverse();
-            textBox2.Text = JsonConvert.SerializeObject(reversedBlocks, Formatting.Indented);
+            //textBox2.Text = JsonConvert.SerializeObject(reversedBlocks, Formatting.Indented);
             label3.Text = string.Empty;
             button1.Text = "Start";
             var lastBlock = LastBlock();
             string strJson = JsonConvert.SerializeObject(lastBlock);
+            
 
-            Connect();
+            string data_toNode = $"%SENDMINEDBLOCK%{LastBlock().TimeStamp.ToString()},{LastBlock().Hash.ToString()},{LastBlock().Difficulty},{LastBlock().Nonce}";
+            SendToServer(data_toNode);
+
+            //MessageBox.Show(LastBlock().Index.ToString() + LastBlock().TimeStamp.ToString());
+
+            //Connect();
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -203,6 +275,11 @@ namespace Miner
         }
 
         private void Form1_Load(object sender, EventArgs e)
+        {
+            ConnectToNode();
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
         {
 
         }
